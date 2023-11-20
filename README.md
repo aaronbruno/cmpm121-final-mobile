@@ -1,10 +1,8 @@
 # 121 Final Game: Name tbd
 
-## Devlogs
+## Devlog Entry - 11/19
 
-tbd
-
-## introducing The Team
+### introducing The Team
 
 * Design Lead: Aaron Bruno (aaronbruno)
 * Design Co-Lead: Brandon Jack (Brandonjack9)
@@ -12,7 +10,7 @@ tbd
 * Engine Co-Lead: Brayden Smith (TheRealC3po, bsmit104)
 * Tools Lead: Anthony Umemoto (CaptainToTo)
 
-## Tools and Materials
+### Tools and Materials
 
 * Phaser
 * Typescript
@@ -20,7 +18,7 @@ tbd
 * Vite
 * Github Actions & Pages
 
-## Outlook
+### Outlook
 
 **What is your team hoping to accomplish that other teams might not attempt?**\
 We are hoping to accomplish a unique aesthetic with a horror style farming sim which will stick out as opposed to a happy go lucky, calm farming. We also hope to have very nice Phaser code without any code smells that is portfolio worthy.
