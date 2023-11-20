@@ -2,8 +2,8 @@ import Phaser from "phaser";
 
 // test basic functionality
 
-export class Title extends Phaser.Scene {
+export class Test extends Phaser.Scene {
   constructor() {
-    super("Title");
+    super("Test");
   }
 }
