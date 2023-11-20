@@ -47,4 +47,22 @@ export default abstract class GridObject {
     //this.sprite.x = this.col * Grid.cellWidth;
     //this.sprite.y = this.row * Grid.cellHeight;
   }
+
+  /**
+   * move the object to a specific grid column, keeping its row position
+   * @param col grid column number
+   */
+  moveToCol(col: number) {
+    this._col = col;
+    //this.sprite.x = this.col * Grid.cellWidth;
+  }
+
+  /**
+   * move the object to a specific grid row, keeping its column position
+   * @param row grid row number
+   */
+  moveToRow(row: number) {
+    this._row = row;
+    //this.sprite.y = this.row * Grid.cellWidth;
+  }
 }
