@@ -2,8 +2,15 @@ import Phaser from "phaser";
 
 export default abstract class GridObject {
   readonly name: string;
-  row: number;
-  col: number;
+  private _row: number;
+  get row(): number { 
+    return this._row; 
+  }
+
+  private _col: number;
+  get col(): number { 
+    return this._col; 
+  }
 
   // grid: Grid;
 
@@ -18,8 +25,8 @@ export default abstract class GridObject {
    */
   constructor(scene: Phaser.Scene, name: string, spriteName: string) {
     this.name = name;
-    this.row = 0;
-    this.col = 0;
+    this._row = 0;
+    this._col = 0;
     this.scene = scene;
     this.sprite = this.scene.add.sprite(0, 0, spriteName);
   }
@@ -35,8 +42,8 @@ export default abstract class GridObject {
    * @param col grid column number
    */
   moveToCell(row: number, col: number) {
-    this.row = row;
-    this.col = col;
+    this._row = row;
+    this._col = col;
     //this.sprite.x = this.col * Grid.cellWidth;
     //this.sprite.y = this.row * Grid.cellHeight;
   }
