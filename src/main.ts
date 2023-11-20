@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { Test } from "./scenes/test-level";
 
 const game = new Phaser.Game({
   scale: {
@@ -8,7 +9,7 @@ const game = new Phaser.Game({
       height: 1080
   },
   backgroundColor: 0x0000ff,
-  scene: [],
+  scene: [Test],
   title: "121 Final"
 });
 
