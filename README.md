@@ -12,11 +12,14 @@
 
 ### Tools and Materials
 
-* Phaser
-* Typescript
-* ESLint
-* Vite
-* Github Actions & Pages
+**Library & Platform: Phaser & Github Pages**\
+We mainly decided to use Phaser because we are all already familiar with the environment. It also allows us to see the changes we make to the codebase in-browser immediately. Finally, [Phaser Labs](https://labs.phaser.io) provides a rich library of code examples for any number of game mechanics, visual effects, audio effects, etc.
+
+**Languages: Typescript & JSON**\
+Typescript is up and coming again as a hot language since the update of Node.js recently. This has brought the language back to many job description requirements as some of the group members here have noticed. This is a good language choice for a portfolio piece. We have also been working with it this quarter since we are comfortable with working in the language. We also plan to have a crispy HTML page that is nicely engaging with a title and other documentation.
+
+**Tools: ESLint, Aesprite/Photoshop, & VSCode**\
+We will be using Visual Studio Code because it is the best IDE and we are most familiar/comfortable with it. We will be using Aseprite and/or Photoshop for creating visual assets because most team members are familiar with them and have experience using both.
 
 ### Outlook
 
