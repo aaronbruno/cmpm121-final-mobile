@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { Position } from "./grid";
 
 export default abstract class TileObject {
   readonly name: string;
@@ -10,6 +11,10 @@ export default abstract class TileObject {
   private _col: number;
   get col(): number { 
     return this._col; 
+  }
+
+  get key(): Position {
+    return {row: this._row, col: this._col};
   }
 
   // grid: Grid;
