@@ -1,4 +1,4 @@
-interface Position {
+export interface Position {
   row: number;
   col: number;
 }
@@ -27,11 +27,10 @@ export default class Grid {
     readonly tileHeight: number
   ) {}
 
-  public static hasTileObj(pos: Position): boolean {
-    return Grid.tiles.has(pos);
-  }
-
-  public static getTileObjs(pos: Position): TileObject[] {
+  public static getTile(pos: Position): TileObject[] {
+    if (!Grid.tiles.has(pos)) {
+      Grid.tiles.set(pos, []);
+    }
     return Grid.tiles.get(pos)!;
   }
 
@@ -50,6 +49,21 @@ export default class Grid {
   public static removeTileObj(obj: TileObject) {
     const objs = Grid.tiles.get(obj.pos);
     objs?.splice(objs.indexOf(obj), 1);
+  }
+
+  public static getAdjacentTiles(obj: TileObject): {
+    left: TileObject[];
+    right: TileObject[];
+    up: TileObject[];
+    down: TileObject[];
+  } {
+    const center = obj.pos;
+    return {
+      left: Grid.getTile({ row: center.row - 1, col: center.col}),
+      right: Grid.getTile({ row: center.row + 1, col: center.col}),
+      up: Grid.getTile({ row: center.row, col: center.col - 1 }),
+      down: Grid.getTile({ row: center.row, col: center.col + 1 }),
+    };
   }
 
   public static nextTurn() {
