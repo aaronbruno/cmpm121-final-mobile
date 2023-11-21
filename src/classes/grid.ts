@@ -1,30 +1,62 @@
 interface Position {
-    row: number,
-    col: number,
+  row: number;
+  col: number;
 }
 
 interface TileObject {
-    pos: Position;
-  }
+  pos: Position;
+  takeTurn(): void;
+}
 
 export default class Grid {
-  private static tiles = new Map<Position, TileObject>;
+  static readonly width: number;
+  static readonly height: number;
+
+  static readonly tileWidth: number;
+  static readonly tileHeight: number;
+
+  private static tiles = new Map<Position, TileObject[]>();
   /**
    * @param width the width of the grid in tiles
    * @param height the height of the grid in tiles
    */
-  constructor(readonly width: number, readonly height: number) {}
+  constructor(
+    readonly width: number,
+    readonly height: number,
+    readonly tileWidth: number,
+    readonly tileHeight: number
+  ) {}
 
   public static hasTileObj(pos: Position): boolean {
     return Grid.tiles.has(pos);
   }
 
-  public static getTileObj(pos: Position): TileObject {
+  public static getTileObjs(pos: Position): TileObject[] {
     return Grid.tiles.get(pos)!;
   }
 
-  public static setTileObj(obj: TileObject) {
-    Grid.tiles.set(obj.pos, obj);
+  public static addTileObj(obj: TileObject) {
+    if (
+      obj.pos >= { row: 0, col: 0 } &&
+      obj.pos < { row: Grid.width, col: Grid.height }
+    )
+      if (!Grid.tiles.has(obj.pos)) {
+        Grid.tiles.set(obj.pos, []);
+      }
+
+    Grid.tiles.get(obj.pos)?.push(obj);
   }
 
+  public static removeTileObj(obj: TileObject) {
+    const objs = Grid.tiles.get(obj.pos);
+    objs?.splice(objs.indexOf(obj), 1);
+  }
+
+  public static nextTurn() {
+    for (const [, objs] of Grid.tiles) {
+      for (const obj of objs) {
+        obj.takeTurn();
+      }
+    }
+  }
 }
