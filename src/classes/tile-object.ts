@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-export default abstract class GridObject {
+export default abstract class TileObject {
   readonly name: string;
   private _row: number;
   get row(): number { 
@@ -41,11 +41,11 @@ export default abstract class GridObject {
    * @param row grid row number
    * @param col grid column number
    */
-  moveToCell(row: number, col: number) {
+  moveToTile(row: number, col: number) {
     this._row = row;
     this._col = col;
-    //this.sprite.x = this.col * Grid.cellWidth;
-    //this.sprite.y = this.row * Grid.cellHeight;
+    //this.sprite.x = this.col * Grid.tileWidth;
+    //this.sprite.y = this.row * Grid.tileHeight;
   }
 
   /**
@@ -54,7 +54,7 @@ export default abstract class GridObject {
    */
   moveToCol(col: number) {
     this._col = col;
-    //this.sprite.x = this.col * Grid.cellWidth;
+    //this.sprite.x = this.col * Grid.tileWidth;
   }
 
   /**
@@ -63,6 +63,6 @@ export default abstract class GridObject {
    */
   moveToRow(row: number) {
     this._row = row;
-    //this.sprite.y = this.row * Grid.cellWidth;
+    //this.sprite.y = this.row * Grid.tileWidth;
   }
 }
