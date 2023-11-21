@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { Position } from "./grid";
+import Grid from "./grid";
 
 export default abstract class TileObject {
   readonly name: string;
@@ -13,7 +14,7 @@ export default abstract class TileObject {
     return this._col; 
   }
 
-  get key(): Position {
+  get pos(): Position {
     return {row: this._row, col: this._col};
   }
 
@@ -34,7 +35,29 @@ export default abstract class TileObject {
     this._col = 0;
     this.scene = scene;
     this.sprite = this.scene.add.sprite(0, 0, spriteName);
+    this.addToGrid();
   }
+
+  private addToGrid() {
+    Grid.addTileObj(this);
+  }
+
+  private removeFromGrid() {
+    Grid.removeTileObj(this);
+  }
+
+  /**
+   * get the neighboring TileObjects to this TileObject
+   * @returns arrays of neighbors to the left, right, up, and down directions
+   */
+  // getNeighbors(): {
+  //   left: TileObject[];
+  //   right: TileObject[];
+  //   up: TileObject[];
+  //   down: TileObject[];
+  // } {
+  //   return Grid.getAdjacentTiles(this);
+  // }
 
   /**
    * Called by grid for this object to take its turn.
@@ -47,10 +70,12 @@ export default abstract class TileObject {
    * @param col grid column number
    */
   moveToTile(row: number, col: number) {
+    this.removeFromGrid();
     this._row = row;
     this._col = col;
-    //this.sprite.x = this.col * Grid.tileWidth;
-    //this.sprite.y = this.row * Grid.tileHeight;
+    this.sprite.x = this.col * Grid.tileWidth;
+    this.sprite.y = this.row * Grid.tileHeight;
+    this.addToGrid();
   }
 
   /**
@@ -58,8 +83,7 @@ export default abstract class TileObject {
    * @param col grid column number
    */
   moveToCol(col: number) {
-    this._col = col;
-    //this.sprite.x = this.col * Grid.tileWidth;
+    this.moveToTile(this._row, col);
   }
 
   /**
@@ -67,7 +91,6 @@ export default abstract class TileObject {
    * @param row grid row number
    */
   moveToRow(row: number) {
-    this._row = row;
-    //this.sprite.y = this.row * Grid.tileWidth;
+    this.moveToTile(row, this._col);
   }
 }
