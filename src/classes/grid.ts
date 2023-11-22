@@ -6,11 +6,28 @@ export interface Position {
 }
 
 export default class Grid {
-  static readonly width: number;
-  static readonly height: number;
+  private static _width: number;
+  public static get width(): number {
+    return this._width;
+  }
+  private static _height: number;
+  public static get height(): number {
+    return this._height;
+  }
 
-  static readonly tileWidth: number;
-  static readonly tileHeight: number;
+  private static _tileWidth: number;
+  public static get tileWidth(): number {
+    return this._tileWidth;
+  }
+  private static _tileHeight: number;
+  public static get tileHeight(): number {
+    return this._tileHeight;
+  }
+
+  private static _scene: Phaser.Scene;
+  public static get scene(): Phaser.Scene {
+    return this._scene;
+  }
 
   private static tiles = new Map<Position, TileObject[]>();
   /**
@@ -21,8 +38,15 @@ export default class Grid {
     readonly width: number,
     readonly height: number,
     readonly tileWidth: number,
-    readonly tileHeight: number
-  ) {}
+    readonly tileHeight: number,
+    readonly scene: Phaser.Scene,
+  ) {
+    Grid._width = width;
+    Grid._height = height;
+    Grid._tileWidth = tileWidth;
+    Grid._tileHeight = tileHeight;
+    Grid._scene = scene;
+  }
 
   public static getTile(pos: Position): TileObject[] {
     if (!Grid.tiles.has(pos)) {
@@ -34,7 +58,7 @@ export default class Grid {
   public static addTileObj(obj: TileObject) {
     if (
       obj.pos >= { row: 0, col: 0 } &&
-      obj.pos < { row: Grid.width, col: Grid.height }
+      obj.pos < { row: Grid._width, col: Grid._height }
     )
       if (!Grid.tiles.has(obj.pos)) {
         Grid.tiles.set(obj.pos, []);
@@ -69,5 +93,11 @@ export default class Grid {
         obj.takeTurn();
       }
     }
+  }
+
+  public static drawTiles() {
+    const map = Grid._scene.make.tilemap({key:"map"});
+    const tileset = map.addTilesetImage("farmtiles");
+    map.createLayer(0, tileset!, 0, 0)!.setScale(8);
   }
 }

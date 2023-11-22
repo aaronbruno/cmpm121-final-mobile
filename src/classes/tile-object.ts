@@ -35,6 +35,9 @@ export default abstract class TileObject {
     this._col = 0;
     this.scene = scene;
     this.sprite = this.scene.add.sprite(0, 0, spriteName);
+    const ratio = this.sprite.height / this.sprite.width;
+    this.sprite.width = Grid.tileWidth;
+    this.sprite.height = ratio * Grid.tileWidth;
     this.addToGrid();
   }
 
