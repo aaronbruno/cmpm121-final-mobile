@@ -1,11 +1,8 @@
+import TileObject from "./tile-object";
+
 export interface Position {
   row: number;
   col: number;
-}
-
-interface TileObject {
-  pos: Position;
-  takeTurn(): void;
 }
 
 export default class Grid {
