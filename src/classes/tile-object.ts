@@ -50,14 +50,14 @@ export default abstract class TileObject {
    * get the neighboring TileObjects to this TileObject
    * @returns arrays of neighbors to the left, right, up, and down directions
    */
-  // getNeighbors(): {
-  //   left: TileObject[];
-  //   right: TileObject[];
-  //   up: TileObject[];
-  //   down: TileObject[];
-  // } {
-  //   return Grid.getAdjacentTiles(this);
-  // }
+  getNeighbors(): {
+    left: TileObject[];
+    right: TileObject[];
+    up: TileObject[];
+    down: TileObject[];
+  } {
+    return Grid.getAdjacentTiles(this);
+  }
 
   /**
    * Called by grid for this object to take its turn.
