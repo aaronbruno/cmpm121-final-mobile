@@ -8,7 +8,7 @@ export class Test extends Phaser.Scene {
 
   constructor() {
     super("Test");
-    this.grid = new Grid(10, 10, 16, 16, this);
+    this.grid = new Grid(10, 10, 128, 128, this); //10, 10, 16, 16, this ... I multiplied by scale 8 like in drawTiles
   }
 
   preload() {
