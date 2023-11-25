@@ -18,8 +18,6 @@ export default abstract class TileObject {
     return {row: this._row, col: this._col};
   }
 
-  // grid: Grid;
-
   readonly scene: Phaser.Scene;
   sprite: Phaser.GameObjects.Sprite;
 

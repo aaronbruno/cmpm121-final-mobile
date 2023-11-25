@@ -17,10 +17,10 @@ export class Test extends Phaser.Scene {
 
   preload() {
     this.load.path = "assets/";
-    this.load.image("dryTile", "drydirt.png");
-    this.load.image("blue", "blueFront.png");
-    this.load.tilemapTiledJSON("map", "farmWet.json");
-    this.load.spritesheet("farmtiles", "farmtiles.png", { frameWidth: 16, frameHeight: 16 });
+    this.load.image("dryTile", "terrain/drydirt.png");
+    this.load.image("blue", "characters/blueFront.png");
+    this.load.tilemapTiledJSON("map", "terrain/farmWet.json");
+    this.load.spritesheet("farmtiles", "terrain/farmtiles.png", { frameWidth: 16, frameHeight: 16 });
   }
 
   create() {
