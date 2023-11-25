@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { Test } from "./scenes/test-level";
+import { gridConfig } from "./grid-config";
 
 //random change
 const game = new Phaser.Game({
@@ -7,8 +8,8 @@ const game = new Phaser.Game({
   scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
-      width: 1280,
-      height: 1280
+      width: gridConfig.width,
+      height: gridConfig.height
   },
   physics: {
     default: "arcade",
