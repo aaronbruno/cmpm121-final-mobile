@@ -2,20 +2,28 @@ import Phaser from "phaser";
 import { Position } from "./grid";
 import Grid from "./grid";
 
+export interface TileObjectConfig {
+  readonly scene: Phaser.Scene;
+  readonly name: string;
+  readonly spriteName: string;
+  readonly row: number;
+  readonly col: number;
+}
+
 export default abstract class TileObject {
   readonly name: string;
   private _row: number;
-  get row(): number { 
-    return this._row; 
+  get row(): number {
+    return this._row;
   }
 
   private _col: number;
-  get col(): number { 
-    return this._col; 
+  get col(): number {
+    return this._col;
   }
 
   get pos(): Position {
-    return {row: this._row, col: this._col};
+    return { row: this._row, col: this._col };
   }
 
   readonly scene: Phaser.Scene;
@@ -23,24 +31,28 @@ export default abstract class TileObject {
 
   /**
    * get a new grid object
-   * @param scene the scene this object is being placed in
-   * @param name the name of the object
-   * @param spriteName the sprite name that will be used to create its Phaser sprite
+   * @param config config object containing a scene, name, spriteName, row, and column
    */
-  constructor(scene: Phaser.Scene, name: string, spriteName: string) {
-    this.name = name;
-    this._row = 0;
-    this._col = 0;
-    this.scene = scene;
-    this.sprite = this.scene.add.sprite(0, 0, spriteName);
+  constructor(config: TileObjectConfig) {
+    this.name = config.name;
+    this._row = config.row;
+    this._col = config.col;
+    this.scene = config.scene;
+    this.sprite = this.scene.add.sprite(
+      (this.col * Grid.tileWidth) + (Grid.tileWidth * 0.5),
+      (this.row * Grid.tileHeight) + (Grid.tileHeight * 0.5),
+      config.spriteName
+    );
+    const scaleFactor = Grid.tileWidth / this.sprite.width;
     const ratio = this.sprite.height / this.sprite.width;
-    this.sprite.width = Grid.tileWidth;
-    this.sprite.height = ratio * Grid.tileWidth;
+    this.sprite.setScale(scaleFactor, scaleFactor * ratio);
     this.addToGrid();
   }
 
   private addToGrid() {
     Grid.addTileObj(this);
+    console.log("added to grid tile at:", this.pos);
+    console.log(`objects at grid tile ${this.pos.row},${this.pos.col}`, Grid.getTile(this.pos));
   }
 
   private removeFromGrid() {
@@ -74,8 +86,8 @@ export default abstract class TileObject {
     this.removeFromGrid();
     this._row = row;
     this._col = col;
-    this.sprite.x = this.col * Grid.tileWidth;
-    this.sprite.y = this.row * Grid.tileHeight;
+    this.sprite.x = (this.col * Grid.tileWidth) + (Grid.tileWidth * 0.5);
+    this.sprite.y = (this.row * Grid.tileHeight) + (Grid.tileHeight * 0.5);
     this.addToGrid();
   }
 
