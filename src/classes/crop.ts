@@ -1,7 +1,7 @@
 import {TileObjectConfig } from "./tile-object";
 import TileObject from "./tile-object";
 
-export enum PlantType {
+export enum CropType {
   green,
   purple,
   red
@@ -9,15 +9,15 @@ export enum PlantType {
 
 // plant class for growing and harvesting plants
 
-export default class Plant extends TileObject {
+export default class Crop extends TileObject {
   private _level: number;
   public get level(): number {
     return this._level; 
   }
-  readonly type: PlantType;
+  readonly type: CropType;
   readonly growthRate: number; // number of turns to grow another level
 
-  constructor(type: PlantType, growthRate: number, config: TileObjectConfig) {
+  constructor(type: CropType, growthRate: number, config: TileObjectConfig) {
     super(config);
     this._level = 0;
     this.type = type;

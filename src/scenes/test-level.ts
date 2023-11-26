@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import Player from "../classes/player";
 import Grid from "../classes/grid";
 import { gridConfig } from "../grid-config";
-import Plant, { PlantType } from "../classes/plant";
+import Crop, { CropType } from "../classes/crop";
 
 // test basic functionality
 //random change
@@ -47,7 +47,7 @@ export class Test extends Phaser.Scene {
         console.log("already here");
         return;
       }
-      const plant = new Plant(PlantType.green, 10, {
+      const plant = new Crop(CropType.green, 10, {
         scene: this,
         name: "plant",
         spriteName: "green1",
