@@ -6,6 +6,16 @@ export interface Position {
 }
 
 export default class Grid {
+  // forEachTile(arg0: (tile: Tile) => void) {
+  //   throw new Error("Method not implemented.");
+  // }
+  forEachTile(callback: (tile: TileObject) => void) {
+    for (const [, objs] of Grid.tiles) {
+      for (const obj of objs) {
+        callback(obj);
+      }
+    }
+  }
   private static _width: number;
   public static get width(): number {
     return this._width;

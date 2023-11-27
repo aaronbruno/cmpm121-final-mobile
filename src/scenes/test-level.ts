@@ -3,6 +3,7 @@ import Player from "../classes/player";
 import Grid from "../classes/grid";
 import { gridConfig } from "../grid-config";
 import Crop, { CropType } from "../classes/crop";
+import TileObject from "../classes/tile-object";
 
 // test basic functionality
 //random change
@@ -54,10 +55,10 @@ export class Test extends Phaser.Scene {
     this.input.on("pointerdown", () => {
       const row = Math.floor(Test.mouseY / Grid.tileHeight);
       const col = Math.floor(Test.mouseX / Grid.tileWidth);
-      if (Grid.getTile({ row: row, col: col }).length > 0) {
-        console.log("already here");
-        return;
-      }
+      const clickedPosition = new Phaser.Math.Vector2(Test.mouseX, Test.mouseY);
+      const distanceToPlayer = Phaser.Math.Distance.BetweenPoints(clickedPosition, this.player);
+  
+      if (distanceToPlayer <= 300 && Grid.getTile({ row: row, col: col }).length === 0) {
       const plant = new Crop(CropType.green, 10, {
         scene: this,
         name: "plant",
@@ -67,6 +68,10 @@ export class Test extends Phaser.Scene {
       });
       console.log(plant);
       plant.takeTurn();
+    }
+    else {
+      console.log("Cannot place plant here.");
+    }
     });
   }
 
@@ -78,7 +83,6 @@ export class Test extends Phaser.Scene {
   update() {
     this.player.update();
 
-    /////////////last added but incomplete//////////////
     const distanceMoved = Phaser.Math.Distance.Between(
       this.player.x,
       this.player.y,
@@ -90,19 +94,26 @@ export class Test extends Phaser.Scene {
 
     if (distanceMoved > thresholdPixelsWalked) {
       // if placed crop can grow and pixelWalked requirement met, evolve
-      if (distanceMoved >= thresholdPixelsWalked) {
-        this.updatePlayerPrevPosition(); //turn based evolution system
+      if (distanceMoved > thresholdPixelsWalked) {
+        this.updatePlayerPrevPosition(); // turn-based evolution system
         console.log("satisfied");
-
+    
+        /////////////last added but incomplete//////////////
+        this.grid.forEachTile((tile: TileObject) => {
+          const isPlant = tile instanceof Crop;
+          if (isPlant && tile.level < 2) {
+            (tile as Crop).takeTurn();
+            console.log("hi");
+            //const newSpriteKey = `greenlevel${(tile as Crop).level}`;
+            //tile.setTexture(newSpriteKey);
+          }
+        });
         // this.grid.forEachTile((tile: Tile) => {
         // //if plant on tile
         //   const plant = tile.getObjectByName("plant") as Crop;
         //   if (plant && plant.level < 2) {
-        //     // Update the plant to the next level
         //     plant.takeTurn();
-        //     // //change plant image to next level
         //     // const newSpriteKey = `greenlevel${plant.level}`;
-        //     // // Load the new sprite for the plant
         //     // plant.setTexture(newSpriteKey);
         //   }
         // });
