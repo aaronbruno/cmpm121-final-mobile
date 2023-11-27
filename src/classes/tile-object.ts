@@ -25,9 +25,8 @@ export default abstract class TileObject {
   /**
    * returns the key used to access this object's tile in the grid
    */
-  get pos(): Position /*string*/ {
+  get pos(): Position {
     return { row: this._row, col: this._col };
-    // return `${this.row},${this.col}`;
   }
 
   readonly scene: Phaser.Scene;
@@ -55,8 +54,6 @@ export default abstract class TileObject {
 
   protected addToGrid() {
     Grid.addTileObj(this);
-    console.log("added to grid tile at:", this.pos);
-    console.log(`objects at grid tile ${this.pos.row},${this.pos.col}`, Grid.getTile(this.pos));
   }
 
   protected removeFromGrid() {

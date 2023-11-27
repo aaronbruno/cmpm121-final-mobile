@@ -18,7 +18,8 @@ export default class Grid {
   }
 
   public static getTileObject(pos: Position): TileObject | undefined {
-    const tiles = Grid.tiles.get(pos);
+    const key = Grid.getKey(pos);
+    const tiles = Grid.tiles.get(key);
     if (tiles && tiles.length > 0) {
       return tiles[0];
     }
@@ -48,7 +49,7 @@ export default class Grid {
     return this._scene;
   }
 
-  private static tiles = new Map<Position, TileObject[]>();
+  private static tiles = new Map<string, TileObject[]>();
   /**
    * @param width the width of the grid in tiles
    * @param height the height of the grid in tiles
@@ -67,27 +68,35 @@ export default class Grid {
     Grid._scene = scene;
   }
 
+  public static getKey(pos: Position): string {
+    return `${pos.row},${pos.col}`;
+  }
+
   public static getTile(pos: Position): TileObject[] {
-    if (!Grid.tiles.has(pos)) {
-      Grid.tiles.set(pos, []);
+    const key = Grid.getKey(pos);
+    if (!Grid.tiles.has(key)) {
+      Grid.tiles.set(key, []);
     }
-    return Grid.tiles.get(pos)!;
+    return Grid.tiles.get(key)!;
   }
 
   public static addTileObj(obj: TileObject) {
+    const key = Grid.getKey(obj.pos);
     if (
       obj.pos >= { row: 0, col: 0 } &&
       obj.pos < { row: Grid._width, col: Grid._height }
-    )
-      if (!Grid.tiles.has(obj.pos)) {
-        Grid.tiles.set(obj.pos, []);
+    ) {
+      if (!Grid.tiles.has(key)) {
+        Grid.tiles.set(key, []);
       }
+    }
 
-    Grid.tiles.get(obj.pos)?.push(obj);
+    Grid.tiles.get(key)?.push(obj);
   }
 
   public static removeTileObj(obj: TileObject) {
-    const objs = Grid.tiles.get(obj.pos);
+    const key = Grid.getKey(obj.pos);
+    const objs = Grid.tiles.get(key);
     objs?.splice(objs.indexOf(obj), 1);
   }
 
