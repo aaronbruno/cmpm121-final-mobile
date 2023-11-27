@@ -39,4 +39,9 @@ export default class Crop extends TileObject {
     console.log("level up");
     this._level++;
   }
+
+  // setSprite(spriteName: string) {
+  //   this.scene.textures.remove(this.texture.key);
+  //   this.setTexture(spriteName);
+  // }
 }
