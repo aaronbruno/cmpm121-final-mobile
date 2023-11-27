@@ -49,13 +49,13 @@ export default abstract class TileObject {
     this.addToGrid();
   }
 
-  private addToGrid() {
+  protected addToGrid() {
     Grid.addTileObj(this);
     console.log("added to grid tile at:", this.pos);
     console.log(`objects at grid tile ${this.pos.row},${this.pos.col}`, Grid.getTile(this.pos));
   }
 
-  private removeFromGrid() {
+  protected removeFromGrid() {
     Grid.removeTileObj(this);
   }
 

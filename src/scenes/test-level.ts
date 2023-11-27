@@ -36,6 +36,14 @@ export class Test extends Phaser.Scene {
       frameHeight: 16,
     });
     this.load.image("green1", "plants/greenlevel1.png");
+    this.load.image("green2", "plants/greenlevel2.png");
+    this.load.image("green3", "plants/greenlevel3.png");
+    this.load.image("purple1", "plants/purplelevel1.png");
+    this.load.image("purple2", "plants/purplelevel2.png");
+    this.load.image("purple3", "plants/purplelevel3.png");
+    this.load.image("red1", "plants/redlevel1.png");
+    this.load.image("red2", "plants/redlevel2.png");
+    this.load.image("red3", "plants/redlevel3.png");
   }
 
   static mouseX: number;
@@ -72,13 +80,7 @@ export class Test extends Phaser.Scene {
         distanceToPlayer <= 300 &&
         Grid.getTile({ row: row, col: col }).length === 0
       ) {
-        const plant = new Crop(CropType.green, 10, {
-          scene: this,
-          name: "plant",
-          spriteName: "green1",
-          row: row,
-          col: col,
-        });
+        const plant = Crop.plantCrop(this, CropType.purple, Test.mouseX, Test.mouseY);
         console.log(plant);
         plant.takeTurn();
       } else {
