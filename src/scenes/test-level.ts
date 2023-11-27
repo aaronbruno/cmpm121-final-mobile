@@ -12,6 +12,7 @@ export class Test extends Phaser.Scene {
   grid: Grid;
   player!: Player;
   private playerPrevPosition: Phaser.Math.Vector2;
+  harvestedText: Phaser.GameObjects.Text = {} as Phaser.GameObjects.Text;
 
   constructor() {
     super("Test");
@@ -41,6 +42,12 @@ export class Test extends Phaser.Scene {
   static mouseY: number;
 
   create() {
+    this.harvestedText = this.add.text(10, 10, "Harvested: 0", {
+      fontFamily: "Arial",
+      fontSize: 40,
+      color: "#ffffff",
+    }).setDepth(1);
+
     Grid.drawTiles();
     this.player = new Player(this, 100, 100, "blue");
     this.player.setScale(4);
@@ -56,22 +63,27 @@ export class Test extends Phaser.Scene {
       const row = Math.floor(Test.mouseY / Grid.tileHeight);
       const col = Math.floor(Test.mouseX / Grid.tileWidth);
       const clickedPosition = new Phaser.Math.Vector2(Test.mouseX, Test.mouseY);
-      const distanceToPlayer = Phaser.Math.Distance.BetweenPoints(clickedPosition, this.player);
-  
-      if (distanceToPlayer <= 300 && Grid.getTile({ row: row, col: col }).length === 0) {
-      const plant = new Crop(CropType.green, 10, {
-        scene: this,
-        name: "plant",
-        spriteName: "green1",
-        row: row,
-        col: col,
-      });
-      console.log(plant);
-      plant.takeTurn();
-    }
-    else {
-      console.log("Cannot place plant here.");
-    }
+      const distanceToPlayer = Phaser.Math.Distance.BetweenPoints(
+        clickedPosition,
+        this.player
+      );
+
+      if (
+        distanceToPlayer <= 300 &&
+        Grid.getTile({ row: row, col: col }).length === 0
+      ) {
+        const plant = new Crop(CropType.green, 10, {
+          scene: this,
+          name: "plant",
+          spriteName: "green1",
+          row: row,
+          col: col,
+        });
+        console.log(plant);
+        plant.takeTurn();
+      } else {
+        console.log("Cannot place plant here.");
+      }
     });
   }
 
@@ -87,7 +99,7 @@ export class Test extends Phaser.Scene {
       this.player.x,
       this.player.y,
       this.playerPrevPosition.x,
-      this.playerPrevPosition.y,
+      this.playerPrevPosition.y
     );
 
     const thresholdPixelsWalked = 300;
@@ -97,13 +109,13 @@ export class Test extends Phaser.Scene {
       if (distanceMoved > thresholdPixelsWalked) {
         this.updatePlayerPrevPosition(); // turn-based evolution system
         console.log("satisfied");
-    
+
         /////////////last added but incomplete//////////////
         this.grid.forEachTile((tile: TileObject) => {
           const isPlant = tile instanceof Crop;
           if (isPlant && tile.level < 2) {
-            (tile as Crop).takeTurn();
-            console.log("hi");
+            // (tile as Crop).takeTurn();
+            // console.log("hi");
             //const newSpriteKey = `greenlevel${(tile as Crop).level}`;
             //tile.setTexture(newSpriteKey);
           }

@@ -16,6 +16,15 @@ export default class Grid {
       }
     }
   }
+
+  public static getTileObject(pos: Position): TileObject | undefined {
+    const tiles = Grid.tiles.get(pos);
+    if (tiles && tiles.length > 0) {
+      return tiles[0];
+    }
+    return undefined;
+  }
+  
   private static _width: number;
   public static get width(): number {
     return this._width;
