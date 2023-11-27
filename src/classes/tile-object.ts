@@ -110,4 +110,12 @@ export default abstract class TileObject {
   moveToRow(row: number) {
     this.moveToTile(row, this._col);
   }
+
+  /**
+   * change the object's sprite
+   * @param spriteName image key defined in scene preload
+   */
+  setSprite(spriteName: string) {
+    this.sprite.setTexture(spriteName);
+  }
 }

@@ -45,13 +45,8 @@ export default class Crop extends TileObject {
     console.log("level up");
     this._level++;
     this.growthProgress = 0;
-    this.sprite.setTexture(this.sprites[this.level]);
+    this.setSprite(this.sprites[this.level]);
   }
-
-  // setSprite(spriteName: string) {
-  //   this.scene.textures.remove(this.texture.key);
-  //   this.setTexture(spriteName);
-  // }
 
   /**
    * removes the crop from the scene
