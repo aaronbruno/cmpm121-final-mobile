@@ -3,7 +3,7 @@ import Player from "../classes/player";
 import Grid from "../classes/grid";
 import { gridConfig } from "../grid-config";
 import Crop, { CropType } from "../classes/crop";
-import TileObject from "../classes/tile-object";
+//import TileObject from "../classes/tile-object";
 
 // test basic functionality
 //random change
@@ -112,15 +112,16 @@ export class Test extends Phaser.Scene {
         console.log("satisfied");
 
         /////////////last added but incomplete//////////////
-        this.grid.forEachTile((tile: TileObject) => {
-          const isPlant = tile instanceof Crop;
-          if (isPlant && tile.level < 2) {
-            // (tile as Crop).takeTurn();
-            // console.log("hi");
-            //const newSpriteKey = `greenlevel${(tile as Crop).level}`;
-            //tile.setTexture(newSpriteKey);
-          }
-        });
+        Grid.nextTurn(); // all objects on grid take their turns
+        // this.grid.forEachTile((tile: TileObject) => {
+        //   const isPlant = tile instanceof Crop;
+        //   if (isPlant && tile.level < 2) {
+        //     // (tile as Crop).takeTurn();
+        //     // console.log("hi");
+        //     //const newSpriteKey = `greenlevel${(tile as Crop).level}`;
+        //     //tile.setTexture(newSpriteKey);
+        //   }
+        // });
         // this.grid.forEachTile((tile: Tile) => {
         // //if plant on tile
         //   const plant = tile.getObjectByName("plant") as Crop;

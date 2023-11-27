@@ -32,16 +32,19 @@ export default class Crop extends TileObject {
   }
 
   override takeTurn() {
+    if (this.level >= this.sprites.length) {
+      return;
+    }
     this.growthProgress++;
     if (this.growthProgress >= this.growthRate) {
       this.levelUp();
-      this.growthProgress = 0;
     }
   }
 
   levelUp() {
     console.log("level up");
     this._level++;
+    this.growthProgress = 0;
     this.sprite.setTexture(this.sprites[this.level]);
   }
 
