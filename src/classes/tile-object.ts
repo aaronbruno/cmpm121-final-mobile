@@ -22,6 +22,9 @@ export default abstract class TileObject {
     return this._col;
   }
 
+  /**
+   * returns the key used to access this object's tile in the grid
+   */
   get pos(): Position /*string*/ {
     return { row: this._row, col: this._col };
     // return `${this.row},${this.col}`;
