@@ -81,7 +81,6 @@ export class Test extends Phaser.Scene {
         Grid.getTile({ row: row, col: col }).length === 0
       ) {
         const plant = Crop.plantCrop(this, CropType.purple, Test.mouseX, Test.mouseY);
-        console.log(plant);
         plant.takeTurn();
       } else {
         console.log("Cannot place plant here.");

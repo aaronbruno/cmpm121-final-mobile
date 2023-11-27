@@ -22,8 +22,9 @@ export default abstract class TileObject {
     return this._col;
   }
 
-  get pos(): Position {
+  get pos(): Position /*string*/ {
     return { row: this._row, col: this._col };
+    // return `${this.row},${this.col}`;
   }
 
   readonly scene: Phaser.Scene;
