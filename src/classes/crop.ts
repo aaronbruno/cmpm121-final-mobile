@@ -50,6 +50,10 @@ export default class Crop extends TileObject {
   //   this.setTexture(spriteName);
   // }
 
+  /**
+   * removes the crop from the scene
+   * @returns the number of points the crop is worth
+   */
   eat(): number {
     this.sprite.destroy();
     this.removeFromGrid();
