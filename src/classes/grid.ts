@@ -1,4 +1,5 @@
 import TileObject from "./tile-object";
+import luck from "../luck";
 
 export interface Position {
   row: number;
@@ -49,6 +50,15 @@ export default class Grid {
     return this._scene;
   }
 
+  public static get sunLevel(): number {
+    return luck(this._turnNumber.toString());
+  }
+
+  private static _turnNumber: number;
+  public static get turnNumber(): number {
+    return this._turnNumber;
+  }
+
   private static tiles = new Map<string, TileObject[]>();
   /**
    * @param width the width of the grid in tiles
@@ -66,6 +76,7 @@ export default class Grid {
     Grid._tileWidth = tileWidth;
     Grid._tileHeight = tileHeight;
     Grid._scene = scene;
+    Grid._turnNumber = 0;
   }
 
   public static getKey(pos: Position): string {
@@ -121,6 +132,11 @@ export default class Grid {
         obj.takeTurn();
       }
     }
+    this._turnNumber++;
+  }
+
+  public static getMoisture(pos: Position) {
+    return luck(Grid.getKey(pos) + Grid.turnNumber);
   }
 
   public static drawTiles() {

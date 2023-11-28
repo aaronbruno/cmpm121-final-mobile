@@ -9,8 +9,25 @@ export enum CropType {
   red,
 }
 
-// crop class for growing and harvesting crops
+type CropBehavior = (self: Crop) => void;
 
+export interface CropConfig {
+  readonly objectConfig: TileObjectConfig;
+  readonly type: CropType;
+  readonly sprites: string[];
+  readonly growthRate: number;
+  readonly bestSun: number;
+  readonly bestWater: number;
+  readonly bestNeighborCount: number;
+  readonly turnBehaviors: CropBehavior[];
+  readonly levelUpBehaviors: CropBehavior[];
+}
+
+const maxSunGrowth = 3;
+const maxWaterGrowth = 3;
+const maxNeighborGrowth = 3;
+
+// crop class for growing and harvesting crops
 export default class Crop extends TileObject {
   private _level: number;
   public get level(): number {
@@ -21,26 +38,53 @@ export default class Crop extends TileObject {
   readonly type: CropType;
   readonly growthRate: number; // number of turns to grow another level
   private growthProgress: number; // number of turns taken towards next level
+  readonly bestSun: number;
+  readonly bestWater: number;
+  readonly bestNeighborCount: number;
+  readonly turnBehaviors: CropBehavior[];
+  readonly levelUpBehaviors: CropBehavior[];
 
-  constructor(
-    type: CropType,
-    growthRate: number,
-    sprites: string[],
-    config: TileObjectConfig
-  ) {
-    super(config);
+  constructor(config: CropConfig) {
+    super(config.objectConfig);
     this._level = 0;
-    this.sprites = sprites;
-    this.type = type;
-    this.growthRate = growthRate;
+    this.sprites = config.sprites;
+    this.type = config.type;
+    this.growthRate = config.growthRate;
     this.growthProgress = 0;
+    this.bestSun = config.bestSun;
+    this.bestWater = config.bestWater;
+    this.bestNeighborCount = config.bestNeighborCount;
+    this.turnBehaviors = config.turnBehaviors;
+    this.levelUpBehaviors = config.levelUpBehaviors;
   }
 
   override takeTurn() {
     if (this.level >= this.sprites.length - 1) {
       return;
     }
-    this.growthProgress++; // += Grid.getTile(this.pos).sunlight + Grid.getTile(this.pos).water
+    this.growthProgress++;
+    this.growthProgress += Math.min(
+      maxSunGrowth - Math.abs(Grid.sunLevel - this.bestSun) * maxSunGrowth,
+      0
+    );
+    this.growthProgress += Math.min(
+      maxWaterGrowth -
+        Math.abs(Grid.getMoisture(this.pos) - this.bestWater) * maxWaterGrowth,
+      0
+    );
+    const neighbors = Grid.getAdjacentTiles(this);
+    let sum = 0;
+    sum += neighbors.left.length;
+    sum += neighbors.right.length;
+    sum += neighbors.up.length;
+    sum += neighbors.down.length;
+    this.growthProgress += Math.min(
+      maxNeighborGrowth - Math.abs(sum - this.bestSun),
+      0
+    );
+    this.turnBehaviors.forEach((behavior) => {
+      behavior(this);
+    });
     if (this.growthProgress >= this.growthRate) {
       this.levelUp();
     }
@@ -50,6 +94,9 @@ export default class Crop extends TileObject {
     this._level++;
     this.growthProgress = 0;
     this.setSprite(this.sprites[this.level]);
+    this.levelUpBehaviors.forEach((behavior) => {
+      behavior(this);
+    });
   }
 
   /**
@@ -79,32 +126,64 @@ export default class Crop extends TileObject {
     let sprites: string[] = [];
     let name = "";
     let growthRate = 10;
+    let bestSun = 1;
+    let bestWater = 1;
+    let bestNeighborCount = 0;
+    let turnBehaviors: CropBehavior[] = [];
+    let levelUpBehaviors: CropBehavior[] = [];
 
     switch (type) {
       case CropType.green:
         sprites = ["green1", "green2", "green3"];
         name = "green";
         growthRate = 10;
+        bestSun = 0.5;
+        bestWater = 0.5;
+        bestNeighborCount = 0;
+        turnBehaviors = [];
+        levelUpBehaviors = [];
         break;
       case CropType.purple:
         sprites = ["purple1", "purple2", "purple3"];
         name = "purple";
         growthRate = 14;
+        bestSun = 0.2;
+        bestWater = 0.8;
+        bestNeighborCount = 4;
+        turnBehaviors = [];
+        levelUpBehaviors = [];
         break;
       case CropType.red:
       default:
         sprites = ["red1", "red2", "red3"];
         name = "red";
         growthRate = 6;
+        bestSun = 1;
+        bestWater = 0.2;
+        bestNeighborCount = 2;
+        turnBehaviors = [];
+        levelUpBehaviors = [];
         break;
     }
 
-    const newCrop = new Crop(type, growthRate, sprites, {
+    const objConfig = {
       scene: scene,
       name: name,
       spriteName: sprites[0],
       row: Math.floor(y / Grid.tileHeight),
       col: Math.floor(x / Grid.tileWidth),
+    };
+
+    const newCrop = new Crop({
+      objectConfig: objConfig,
+      type: type,
+      sprites: sprites,
+      growthRate: growthRate,
+      bestSun: bestSun,
+      bestWater: bestWater,
+      bestNeighborCount: bestNeighborCount,
+      turnBehaviors: turnBehaviors,
+      levelUpBehaviors: levelUpBehaviors,
     });
 
     return newCrop;

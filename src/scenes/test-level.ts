@@ -76,18 +76,17 @@ export class Test extends Phaser.Scene {
         this.player
       );
 
-      if (
-        distanceToPlayer <= 300 &&
-        Grid.getTile({ row: row, col: col }).length === 0
-      ) {
-        const plant = Crop.plantCrop(this, CropType.purple, Test.mouseX, Test.mouseY);
-        plant.takeTurn();
-      } else {
-        console.log("Cannot place plant here.");
-      }
+      if (distanceToPlayer <= 300 ) {
+          if (Grid.getTile({ row, col }).length === 0) {
+            const plant = Crop.plantCrop(this, CropType.purple, Test.mouseX, Test.mouseY);
+            plant.takeTurn();
+          } else {
+            const obj = Grid.getTileObject({row, col}) as Crop;
+            obj?.eat();
+          }
+        }
     });
   }
-
   updatePlayerPrevPosition() {
     this.playerPrevPosition.x = this.player.x;
     this.playerPrevPosition.y = this.player.y;
