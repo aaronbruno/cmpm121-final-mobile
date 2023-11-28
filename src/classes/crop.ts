@@ -2,6 +2,7 @@ import Grid from "./grid";
 import { TileObjectConfig } from "./tile-object";
 import TileObject from "./tile-object";
 import Phaser from "phaser";
+import * as Behaviors from "../behaviors/behaviors";
 
 export enum CropType {
   green,
@@ -9,7 +10,7 @@ export enum CropType {
   red,
 }
 
-type CropBehavior = (self: Crop) => void;
+export type CropBehavior = (self: Crop) => void;
 
 export interface CropConfig {
   readonly objectConfig: TileObjectConfig;
@@ -151,7 +152,9 @@ export default class Crop extends TileObject {
         bestWater = 0.8;
         bestNeighborCount = 4;
         turnBehaviors = [];
-        levelUpBehaviors = [];
+        levelUpBehaviors = [
+          Behaviors.propagate
+        ];
         break;
       case CropType.red:
       default:
