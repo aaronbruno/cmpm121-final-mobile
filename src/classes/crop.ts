@@ -63,11 +63,11 @@ export default class Crop extends TileObject {
       return;
     }
     this.growthProgress++;
-    this.growthProgress += Math.min(
+    this.growthProgress += Math.max(
       maxSunGrowth - Math.abs(Grid.sunLevel - this.bestSun) * maxSunGrowth,
       0
     );
-    this.growthProgress += Math.min(
+    this.growthProgress += Math.max(
       maxWaterGrowth -
         Math.abs(Grid.getMoisture(this.pos) - this.bestWater) * maxWaterGrowth,
       0
@@ -78,7 +78,7 @@ export default class Crop extends TileObject {
     sum += neighbors.right.length;
     sum += neighbors.up.length;
     sum += neighbors.down.length;
-    this.growthProgress += Math.min(
+    this.growthProgress += Math.max(
       maxNeighborGrowth - Math.abs(sum - this.bestSun),
       0
     );
