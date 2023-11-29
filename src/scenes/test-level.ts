@@ -44,12 +44,39 @@ export class Test extends Phaser.Scene {
     this.load.image("red1", "plants/redlevel1.png");
     this.load.image("red2", "plants/redlevel2.png");
     this.load.image("red3", "plants/redlevel3.png");
+    this.load.image("redButton", "buttons/redButton.png");
+    this.load.image("greenButton", "buttons/greenButton.png");
+    this.load.image("purpleButton", "buttons/purpleButton.png");
   }
 
   static mouseX: number;
   static mouseY: number;
 
   create() {
+
+    let cropType = CropType.purple;
+
+    const redButton = this.add.image(1200, 50, 'redButton').setInteractive();
+    redButton.setScale(3);
+    redButton.on('pointerdown', () => {
+        console.log('red Button Clicked');
+        cropType = CropType.red;
+    }).setDepth(1);
+
+    const greenButton = this.add.image(1135, 50, 'greenButton').setInteractive();
+    greenButton.setScale(3);
+    greenButton.on('pointerdown', () => {
+        console.log('Green Button Clicked');
+        cropType = CropType.green;
+    }).setDepth(1);
+
+    const purpleButton = this.add.image(1070, 50, 'purpleButton').setInteractive();
+    purpleButton.setScale(3);
+    purpleButton.on('pointerdown', () => {
+        console.log('Purple Button Clicked');
+        cropType = CropType.purple;
+    }).setDepth(1);
+
     this.harvestedText = this.add.text(10, 10, "Harvested: 0", {
       fontFamily: "Arial",
       fontSize: 40,
@@ -76,9 +103,9 @@ export class Test extends Phaser.Scene {
         this.player
       );
 
-      if (distanceToPlayer <= 300 ) {
+      if (distanceToPlayer <= 150 ) {
           if (Grid.getTile({ row, col }).length === 0) {
-            const plant = Crop.plantCrop(this, CropType.purple, Test.mouseX, Test.mouseY);
+            const plant = Crop.plantCrop(this, cropType, Test.mouseX, Test.mouseY);
             plant.takeTurn();
           } else {
             const obj = Grid.getTileObject({row, col}) as Crop;
@@ -112,24 +139,6 @@ export class Test extends Phaser.Scene {
 
         /////////////last added but incomplete//////////////
         Grid.nextTurn(); // all objects on grid take their turns
-        // this.grid.forEachTile((tile: TileObject) => {
-        //   const isPlant = tile instanceof Crop;
-        //   if (isPlant && tile.level < 2) {
-        //     // (tile as Crop).takeTurn();
-        //     // console.log("hi");
-        //     //const newSpriteKey = `greenlevel${(tile as Crop).level}`;
-        //     //tile.setTexture(newSpriteKey);
-        //   }
-        // });
-        // this.grid.forEachTile((tile: Tile) => {
-        // //if plant on tile
-        //   const plant = tile.getObjectByName("plant") as Crop;
-        //   if (plant && plant.level < 2) {
-        //     plant.takeTurn();
-        //     // const newSpriteKey = `greenlevel${plant.level}`;
-        //     // plant.setTexture(newSpriteKey);
-        //   }
-        // });
       }
     }
   }
