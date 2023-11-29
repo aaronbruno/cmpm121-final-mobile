@@ -81,7 +81,7 @@ export default class Crop extends TileObject {
     sum += neighbors.up.length;
     sum += neighbors.down.length;
     this.growthProgress += Math.max(
-      maxNeighborGrowth - Math.abs(sum - this.bestSun),
+      maxNeighborGrowth - Math.abs(sum - this.bestNeighborCount),
       0
     );
     this.turnBehaviors.forEach((behavior) => {
