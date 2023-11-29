@@ -15,6 +15,9 @@ export class Test extends Phaser.Scene {
   harvestedText: Phaser.GameObjects.Text = {} as Phaser.GameObjects.Text;
   sunLevelText: Phaser.GameObjects.Text = {} as Phaser.GameObjects.Text;
   sunLevelBar: Phaser.GameObjects.Graphics = {} as Phaser.GameObjects.Graphics;
+  moistureText: Phaser.GameObjects.Text = {} as Phaser.GameObjects.Text;
+  moistureLevelBar: Phaser.GameObjects.Graphics =
+    {} as Phaser.GameObjects.Graphics;
 
   constructor() {
     super("Test");
@@ -118,6 +121,23 @@ export class Test extends Phaser.Scene {
       })
       .setDepth(1);
 
+    this.moistureText = this.add
+      .text(20, this.game.canvas.height - 75, "", {
+        fontFamily: "Arial",
+        fontSize: 50,
+        color: "#ffffff",
+      })
+      .setDepth(2)
+      .setOrigin(0);
+
+    this.moistureLevelBar = this.add
+      .graphics({
+        x: 40,
+        y: this.game.canvas.height - 125,
+        fillStyle: { color: 0x0000ff },
+      })
+      .setDepth(1);
+
     Grid.drawTiles();
     this.player = new Player(this, 100, 100, "blue");
     this.player.setScale(4);
@@ -125,35 +145,60 @@ export class Test extends Phaser.Scene {
     this.physics.world.enable(this.player);
 
     // plant where mouse is clicked
-    this.input.on("pointermove", (pointer: { x: number; y: number }) => {
-      Test.mouseX = pointer.x;
-      Test.mouseY = pointer.y;
-    });
-    this.input.on("pointerdown", () => {
-      const row = Math.floor(Test.mouseY / Grid.tileHeight);
-      const col = Math.floor(Test.mouseX / Grid.tileWidth);
-      const clickedPosition = new Phaser.Math.Vector2(Test.mouseX, Test.mouseY);
-      const distanceToPlayer = Phaser.Math.Distance.BetweenPoints(
-        clickedPosition,
-        this.player
+    this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+      const row = Math.floor(pointer.y / Grid.tileHeight);
+      const col = Math.floor(pointer.x / Grid.tileWidth);
+
+      const tile = Grid.getTile({ row, col });
+
+      const distanceToPlayer = Phaser.Math.Distance.Between(
+        pointer.x,
+        pointer.y,
+        this.player.x,
+        this.player.y
       );
 
       if (distanceToPlayer <= 150) {
-        if (Grid.getTile({ row, col }).length === 0) {
-          const plant = Crop.plantCrop(
-            this,
-            cropType,
-            Test.mouseX,
-            Test.mouseY
-          );
+        if (tile.length === 0) {
+          // Plant functionality
+          // const cropType = CropType.purple; // You may want to change this based on your logic
+          const plant = Crop.plantCrop(this, cropType, pointer.x, pointer.y);
           plant.takeTurn();
         } else {
-          const obj = Grid.getTileObject({ row, col }) as Crop;
-          obj?.eat();
+          // Existing pointerdown functionality for eating crops
+          const distanceToPlayer = Phaser.Math.Distance.BetweenPoints(
+            new Phaser.Math.Vector2(pointer.x, pointer.y),
+            this.player
+          );
+
+          if (distanceToPlayer <= 150 && tile[0] instanceof Crop) {
+            const obj = Grid.getTileObject({ row, col }) as Crop;
+            obj?.eat();
+          }
         }
       }
+
+      // Display moisture level for the clicked tile
+      this.displayMoistureLevel(row, col);
     });
   }
+
+  displayMoistureLevel(row: number, col: number) {
+    const tile = Grid.getTile({ row, col });
+
+    if (tile.length > 0 && tile[0] instanceof Crop) {
+      const crop = Grid.getTileObject({ row, col }) as Crop;
+      const moistureLevel = crop.getMoistureLevel();
+      this.moistureText.setText(`Moisture: ${moistureLevel.toFixed(2)}`);
+
+      const barWidth = Phaser.Math.Linear(0, 100, moistureLevel);
+      this.moistureLevelBar.clear().fillRect(0, 0, barWidth, 20);
+    } else {
+      this.moistureText.setText("");
+      this.moistureLevelBar.clear();
+    }
+  }
+
   updatePlayerPrevPosition() {
     this.playerPrevPosition.x = this.player.x;
     this.playerPrevPosition.y = this.player.y;

@@ -101,6 +101,10 @@ export default class Crop extends TileObject {
     });
   }
 
+  getMoistureLevel(): number {
+    return Grid.getMoisture(this.pos);
+  }
+
   /**
    * removes the crop from the scene
    * @returns the number of points the crop is worth
@@ -157,9 +161,7 @@ export default class Crop extends TileObject {
         bestWater = 0.8;
         bestNeighborCount = 4;
         turnBehaviors = [];
-        levelUpBehaviors = [
-          Behaviors.propagate
-        ];
+        levelUpBehaviors = [Behaviors.propagate];
         break;
       case CropType.red:
       default:
