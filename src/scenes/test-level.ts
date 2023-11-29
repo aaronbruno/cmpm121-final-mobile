@@ -13,6 +13,8 @@ export class Test extends Phaser.Scene {
   player!: Player;
   private playerPrevPosition: Phaser.Math.Vector2;
   harvestedText: Phaser.GameObjects.Text = {} as Phaser.GameObjects.Text;
+  sunLevelText: Phaser.GameObjects.Text = {} as Phaser.GameObjects.Text;
+  sunLevelBar: Phaser.GameObjects.Graphics = {} as Phaser.GameObjects.Graphics;
 
   constructor() {
     super("Test");
@@ -53,35 +55,68 @@ export class Test extends Phaser.Scene {
   static mouseY: number;
 
   create() {
-
     let cropType = CropType.purple;
 
     const redButton = this.add.image(1200, 50, "redButton").setInteractive();
     redButton.setScale(3);
-    redButton.on("pointerdown", () => {
+    redButton
+      .on("pointerdown", () => {
         console.log("red Button Clicked");
         cropType = CropType.red;
-    }).setDepth(1);
+      })
+      .setDepth(1);
 
-    const greenButton = this.add.image(1135, 50, "greenButton").setInteractive();
+    const greenButton = this.add
+      .image(1135, 50, "greenButton")
+      .setInteractive();
     greenButton.setScale(3);
-    greenButton.on("pointerdown", () => {
+    greenButton
+      .on("pointerdown", () => {
         console.log("Green Button Clicked");
         cropType = CropType.green;
-    }).setDepth(1);
+      })
+      .setDepth(1);
 
-    const purpleButton = this.add.image(1070, 50, "purpleButton").setInteractive();
+    const purpleButton = this.add
+      .image(1070, 50, "purpleButton")
+      .setInteractive();
     purpleButton.setScale(3);
-    purpleButton.on("pointerdown", () => {
+    purpleButton
+      .on("pointerdown", () => {
         console.log("Purple Button Clicked");
         cropType = CropType.purple;
-    }).setDepth(1);
+      })
+      .setDepth(1);
 
-    this.harvestedText = this.add.text(10, 10, "", {
-      fontFamily: "Arial",
-      fontSize: 40,
-      color: "#ffffff",
-    }).setDepth(1);
+    this.harvestedText = this.add
+      .text(10, 10, "", {
+        fontFamily: "Arial",
+        fontSize: 40,
+        color: "#ffffff",
+      })
+      .setDepth(1);
+
+    this.sunLevelText = this.add
+      .text(
+        this.game.canvas.width / 2,
+        40,
+        `Sun Level: ${Grid.sunLevel.toFixed(2)}`,
+        {
+          fontFamily: "Arial",
+          fontSize: 50,
+          color: "#ffffff",
+        }
+      )
+      .setOrigin(0.5)
+      .setDepth(1);
+
+    this.sunLevelBar = this.add
+      .graphics({
+        x: this.game.canvas.width / 2 - 100,
+        y: 80,
+        fillStyle: { color: 0xffff00 },
+      })
+      .setDepth(1);
 
     Grid.drawTiles();
     this.player = new Player(this, 100, 100, "blue");
@@ -103,15 +138,20 @@ export class Test extends Phaser.Scene {
         this.player
       );
 
-      if (distanceToPlayer <= 150 ) {
-          if (Grid.getTile({ row, col }).length === 0) {
-            const plant = Crop.plantCrop(this, cropType, Test.mouseX, Test.mouseY);
-            plant.takeTurn();
-          } else {
-            const obj = Grid.getTileObject({row, col}) as Crop;
-            obj?.eat();
-          }
+      if (distanceToPlayer <= 150) {
+        if (Grid.getTile({ row, col }).length === 0) {
+          const plant = Crop.plantCrop(
+            this,
+            cropType,
+            Test.mouseX,
+            Test.mouseY
+          );
+          plant.takeTurn();
+        } else {
+          const obj = Grid.getTileObject({ row, col }) as Crop;
+          obj?.eat();
         }
+      }
     });
   }
   updatePlayerPrevPosition() {
@@ -130,19 +170,26 @@ export class Test extends Phaser.Scene {
     );
 
     this.harvestedText.setText(`Harvested: ${Crop.consumed}`);
+    this.sunLevelText.setText(`Sun Level: ${Grid.sunLevel.toFixed(2)}`);
+
+    // Update the width of the bar based on sun level
+    const barWidth = Phaser.Math.Linear(0, 200, Grid.sunLevel);
+    this.sunLevelBar.clear().fillRect(0, 0, barWidth, 20);
 
     // WIN CONDITION
     if (Crop.consumed >= 30) {
-      this.add.text(
-        this.game.canvas.width / 2,
-        this.game.canvas.height / 2,
-        "You Win!",
-        {
-          fontFamily: "Arial",
-          fontSize: 60,
-          color: "#00ff00",
-        }
-      ).setOrigin(0.5);
+      this.add
+        .text(
+          this.game.canvas.width / 2,
+          this.game.canvas.height / 2,
+          "You Win!",
+          {
+            fontFamily: "Arial",
+            fontSize: 60,
+            color: "#00ff00",
+          }
+        )
+        .setOrigin(0.5);
     }
 
     const thresholdPixelsWalked = 300;
