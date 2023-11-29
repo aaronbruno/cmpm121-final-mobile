@@ -106,6 +106,9 @@ export default class Crop extends TileObject {
    * @returns the number of points the crop is worth
    */
   eat(): number {
+    if (this.level < this.sprites.length - 1) {
+      return -1;
+    }
     this.sprite.destroy();
     this.removeFromGrid();
     Crop.consumed += 1;
