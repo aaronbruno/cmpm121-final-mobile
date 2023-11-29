@@ -56,24 +56,24 @@ export class Test extends Phaser.Scene {
 
     let cropType = CropType.purple;
 
-    const redButton = this.add.image(1200, 50, 'redButton').setInteractive();
+    const redButton = this.add.image(1200, 50, "redButton").setInteractive();
     redButton.setScale(3);
-    redButton.on('pointerdown', () => {
-        console.log('red Button Clicked');
+    redButton.on("pointerdown", () => {
+        console.log("red Button Clicked");
         cropType = CropType.red;
     }).setDepth(1);
 
-    const greenButton = this.add.image(1135, 50, 'greenButton').setInteractive();
+    const greenButton = this.add.image(1135, 50, "greenButton").setInteractive();
     greenButton.setScale(3);
-    greenButton.on('pointerdown', () => {
-        console.log('Green Button Clicked');
+    greenButton.on("pointerdown", () => {
+        console.log("Green Button Clicked");
         cropType = CropType.green;
     }).setDepth(1);
 
-    const purpleButton = this.add.image(1070, 50, 'purpleButton').setInteractive();
+    const purpleButton = this.add.image(1070, 50, "purpleButton").setInteractive();
     purpleButton.setScale(3);
-    purpleButton.on('pointerdown', () => {
-        console.log('Purple Button Clicked');
+    purpleButton.on("pointerdown", () => {
+        console.log("Purple Button Clicked");
         cropType = CropType.purple;
     }).setDepth(1);
 
