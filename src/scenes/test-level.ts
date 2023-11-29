@@ -162,8 +162,7 @@ export class Test extends Phaser.Scene {
         if (tile.length === 0) {
           // Plant functionality
           // const cropType = CropType.purple; // You may want to change this based on your logic
-          const plant = Crop.plantCrop(this, cropType, pointer.x, pointer.y);
-          plant.takeTurn();
+          Crop.plantCrop(this, cropType, pointer.x, pointer.y);
         } else {
           // Existing pointerdown functionality for eating crops
           const distanceToPlayer = Phaser.Math.Distance.BetweenPoints(
