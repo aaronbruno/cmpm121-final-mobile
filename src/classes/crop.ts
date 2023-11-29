@@ -44,6 +44,7 @@ export default class Crop extends TileObject {
   readonly bestNeighborCount: number;
   readonly turnBehaviors: CropBehavior[];
   readonly levelUpBehaviors: CropBehavior[];
+  static consumed = 0;
 
   constructor(config: CropConfig) {
     super(config.objectConfig);
@@ -107,6 +108,7 @@ export default class Crop extends TileObject {
   eat(): number {
     this.sprite.destroy();
     this.removeFromGrid();
+    Crop.consumed += 1;
     return this.level * this.growthRate;
   }
 

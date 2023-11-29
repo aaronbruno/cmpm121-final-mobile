@@ -77,7 +77,7 @@ export class Test extends Phaser.Scene {
         cropType = CropType.purple;
     }).setDepth(1);
 
-    this.harvestedText = this.add.text(10, 10, "Harvested: 0", {
+    this.harvestedText = this.add.text(10, 10, "", {
       fontFamily: "Arial",
       fontSize: 40,
       color: "#ffffff",
@@ -129,6 +129,22 @@ export class Test extends Phaser.Scene {
       this.playerPrevPosition.y
     );
 
+    this.harvestedText.setText(`Harvested: ${Crop.consumed}`);
+
+    // WIN CONDITION
+    if (Crop.consumed >= 30) {
+      this.add.text(
+        this.game.canvas.width / 2,
+        this.game.canvas.height / 2,
+        "You Win!",
+        {
+          fontFamily: "Arial",
+          fontSize: 60,
+          color: "#00ff00",
+        }
+      ).setOrigin(0.5);
+    }
+
     const thresholdPixelsWalked = 300;
 
     if (distanceMoved > thresholdPixelsWalked) {
@@ -137,7 +153,6 @@ export class Test extends Phaser.Scene {
         this.updatePlayerPrevPosition(); // turn-based evolution system
         console.log("satisfied");
 
-        /////////////last added but incomplete//////////////
         Grid.nextTurn(); // all objects on grid take their turns
       }
     }
