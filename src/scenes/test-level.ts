@@ -52,6 +52,8 @@ export class Test extends Phaser.Scene {
     this.load.image("redButton", "buttons/redButton.png");
     this.load.image("greenButton", "buttons/greenButton.png");
     this.load.image("purpleButton", "buttons/purpleButton.png");
+    this.load.image("undoButton", "buttons/undoButton.png");
+    this.load.image("redoButton", "buttons/redoButton.png");
   }
 
   static mouseX: number;
@@ -60,7 +62,24 @@ export class Test extends Phaser.Scene {
   create() {
     let cropType = CropType.purple;
 
-    const redButton = this.add.image(1200, 50, "redButton").setInteractive();
+    const undoButton = this.add.image(1175, 115, "undoButton").setInteractive();
+    undoButton.setScale(3.4);
+    undoButton
+      .on("pointerdown", () => {
+        console.log("undo Button Clicked");
+        cropType = CropType.red;
+      })
+      .setDepth(1);
+
+      const redoButton = this.add.image(1175, 180, "redoButton").setInteractive();
+    redoButton.setScale(3.4);
+    redoButton
+      .on("pointerdown", () => {
+        console.log("redo Button Clicked");
+      })
+      .setDepth(1);
+
+    const redButton = this.add.image(1240, 50, "redButton").setInteractive();
     redButton.setScale(3);
     redButton
       .on("pointerdown", () => {
@@ -70,7 +89,7 @@ export class Test extends Phaser.Scene {
       .setDepth(1);
 
     const greenButton = this.add
-      .image(1135, 50, "greenButton")
+      .image(1175, 50, "greenButton")
       .setInteractive();
     greenButton.setScale(3);
     greenButton
@@ -81,7 +100,7 @@ export class Test extends Phaser.Scene {
       .setDepth(1);
 
     const purpleButton = this.add
-      .image(1070, 50, "purpleButton")
+      .image(1110, 50, "purpleButton")
       .setInteractive();
     purpleButton.setScale(3);
     purpleButton
