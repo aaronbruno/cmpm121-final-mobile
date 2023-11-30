@@ -54,6 +54,7 @@ export class Test extends Phaser.Scene {
     this.load.image("purpleButton", "buttons/purpleButton.png");
     this.load.image("undoButton", "buttons/undoButton.png");
     this.load.image("redoButton", "buttons/redoButton.png");
+    this.load.image("saveButton", "buttons/saveButton.png");
   }
 
   static mouseX: number;
@@ -67,15 +68,22 @@ export class Test extends Phaser.Scene {
     undoButton
       .on("pointerdown", () => {
         console.log("undo Button Clicked");
-        cropType = CropType.red;
       })
       .setDepth(1);
 
-      const redoButton = this.add.image(1175, 180, "redoButton").setInteractive();
+    const redoButton = this.add.image(1175, 180, "redoButton").setInteractive();
     redoButton.setScale(3.4);
     redoButton
       .on("pointerdown", () => {
         console.log("redo Button Clicked");
+      })
+      .setDepth(1);
+
+    const saveButton = this.add.image(1175, 245, "saveButton").setInteractive();
+    saveButton.setScale(3.4);
+    saveButton
+      .on("pointerdown", () => {
+        console.log("save Button Clicked");
       })
       .setDepth(1);
 
