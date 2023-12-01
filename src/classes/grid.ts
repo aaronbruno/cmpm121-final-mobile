@@ -60,7 +60,7 @@ export default class Grid {
     return this._turnNumber;
   }
 
-  private static buff: ArrayBuffer;
+  //private static buff: ArrayBuffer;
 
   private static tiles = new Map<string, TileObject[]>();
   /**
@@ -81,7 +81,7 @@ export default class Grid {
     Grid._scene = scene;
     Grid._turnNumber = 0;
 
-    Grid.buff = new ArrayBuffer(Grid.width * Grid.height * TileObject.numBytes);
+    //Grid.buff = new ArrayBuffer(Grid.width * Grid.height * TileObject.numBytes);
   }
 
   public static getKey(pos: Position): string {
