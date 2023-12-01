@@ -22,6 +22,8 @@ export default abstract class TileObject {
     return this._col;
   }
 
+  static readonly numBytes = 8;
+
   /**
    * returns the key used to access this object's tile in the grid
    */

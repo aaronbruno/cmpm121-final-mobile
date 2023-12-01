@@ -3,6 +3,7 @@ import Player from "../classes/player";
 import Grid from "../classes/grid";
 import { gridConfig } from "../grid-config";
 import Crop, { CropType } from "../classes/crop";
+import SaveManager from "../saves/save-manager";
 //import TileObject from "../classes/tile-object";
 
 // test basic functionality
@@ -68,6 +69,7 @@ export class Test extends Phaser.Scene {
     undoButton
       .on("pointerdown", () => {
         console.log("undo Button Clicked");
+        SaveManager.undo();
       })
       .setDepth(1);
 
@@ -76,6 +78,7 @@ export class Test extends Phaser.Scene {
     redoButton
       .on("pointerdown", () => {
         console.log("redo Button Clicked");
+        SaveManager.redo();
       })
       .setDepth(1);
 
@@ -84,6 +87,7 @@ export class Test extends Phaser.Scene {
     saveButton
       .on("pointerdown", () => {
         console.log("save Button Clicked");
+        SaveManager.save();
       })
       .setDepth(1);
 
@@ -207,6 +211,13 @@ export class Test extends Phaser.Scene {
       // Display moisture level for the clicked tile
       this.displayMoistureLevel(row, col);
     });
+
+
+    // Save Manager Init
+    SaveManager.setPlayer(this.player);
+    SaveManager.setScene(this);
+    SaveManager.loadCurTurn();
+    SaveManager.load();
   }
 
   displayMoistureLevel(row: number, col: number) {
@@ -270,8 +281,10 @@ export class Test extends Phaser.Scene {
       if (distanceMoved > thresholdPixelsWalked) {
         this.updatePlayerPrevPosition(); // turn-based evolution system
         console.log("satisfied");
+        // SaveManager.save(); //autosave
 
         Grid.nextTurn(); // all objects on grid take their turns
+        SaveManager.save();
       }
     }
   }
