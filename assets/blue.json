@@ -1,0 +1,44 @@
+{
+    "frames": [
+      {
+        "filename": "blueForward.png",
+        "frame": {"x": 0, "y": 0, "w": 16, "h": 21},
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 21},
+        "sourceSize": {"w": 16, "h": 21}
+      },
+      {
+        "filename": "blueBack.png",
+        "frame": {"x": 0, "y": 21, "w": 16, "h": 21},
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 21},
+        "sourceSize": {"w": 16, "h": 21}
+      },
+      {
+        "filename": "blueRight.png",
+        "frame": {"x": 0, "y": 42, "w": 16, "h": 21},
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 21},
+        "sourceSize": {"w": 16, "h": 21}
+      },
+      {
+        "filename": "blueLeft.png",
+        "frame": {"x": 0, "y": 63, "w": 16, "h": 21},
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {"x": 0, "y": 0, "w": 16, "h": 21},
+        "sourceSize": {"w": 16, "h": 21}
+      }
+    ],
+    "meta": {
+      "app": "chatgpt",
+      "version": "1.0",
+      "image": "blue.png",
+      "format": "RGBA8888",
+      "size": {"w": 16, "h": 84},
+      "scale": "1"
+    }
+  }

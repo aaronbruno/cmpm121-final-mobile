@@ -4,6 +4,8 @@ import Grid from "../classes/grid";
 import { gridConfig } from "../grid-config";
 import Crop, { CropType } from "../classes/crop";
 import SaveManager from "../saves/save-manager";
+import { gameConfig } from "../main";
+// import { Engine } from "matter";
 //import TileObject from "../classes/tile-object";
 
 // test basic functionality
@@ -53,9 +55,19 @@ export class Test extends Phaser.Scene {
     this.load.image("redButton", "buttons/redButton.png");
     this.load.image("greenButton", "buttons/greenButton.png");
     this.load.image("purpleButton", "buttons/purpleButton.png");
-    this.load.image("undoButton", "buttons/undoButton.png");
-    this.load.image("redoButton", "buttons/redoButton.png");
-    this.load.image("saveButton", "buttons/saveButton.png");
+    if (gameConfig.hebrew) {
+      this.load.image("undoButton", "buttons/undoButtonHebrew.png");
+      this.load.image("redoButton", "buttons/redoButtonHebrew.png");
+      this.load.image("saveButton", "buttons/saveButtonHebrew.png");
+    } else if (gameConfig.chinese) {
+        this.load.image("undoButton", "buttons/undoButtonChinese.png");
+        this.load.image("redoButton", "buttons/redoButtonChinese.png");
+        this.load.image("saveButton", "buttons/saveButtonChinese.png");
+    } else {
+      this.load.image("undoButton", "buttons/undoButton.png");
+      this.load.image("redoButton", "buttons/redoButton.png");
+      this.load.image("saveButton", "buttons/saveButton.png");
+    }
   }
 
   static mouseX: number;
