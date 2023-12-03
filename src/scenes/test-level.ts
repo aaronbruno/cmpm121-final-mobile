@@ -238,7 +238,13 @@ export class Test extends Phaser.Scene {
     if (tile.length > 0 && tile[0] instanceof Crop) {
       const crop = Grid.getTileObject({ row, col }) as Crop;
       const moistureLevel = crop.getMoistureLevel();
+      if (gameConfig.chinese) {
+        this.moistureText.setText(`水分: ${moistureLevel.toFixed(2)}`);
+      } else if (gameConfig.hebrew) {
+        this.moistureText.setText(`לַחוּת: ${moistureLevel.toFixed(2)}`);
+      } else {
       this.moistureText.setText(`Moisture: ${moistureLevel.toFixed(2)}`);
+      }
 
       const barWidth = Phaser.Math.Linear(0, 100, moistureLevel);
       this.moistureLevelBar.clear().fillRect(0, 0, barWidth, 20);
@@ -263,8 +269,16 @@ export class Test extends Phaser.Scene {
       this.playerPrevPosition.y
     );
 
-    this.harvestedText.setText(`Harvested: ${Crop.consumed}`);
-    this.sunLevelText.setText(`Sun Level: ${Grid.sunLevel.toFixed(2)}`);
+    if (gameConfig.chinese) {
+      this.harvestedText.setText(`收获的: ${Crop.consumed}`);
+      this.sunLevelText.setText(`太阳高度: ${Grid.sunLevel.toFixed(2)}`);
+    } else if (gameConfig.hebrew) {
+      this.harvestedText.setText(`בָּצוּר: ${Crop.consumed}`);
+      this.sunLevelText.setText(`מפלס השמש: ${Grid.sunLevel.toFixed(2)}`);
+    } else {
+      this.harvestedText.setText(`Harvested: ${Crop.consumed}`);
+      this.sunLevelText.setText(`Sun Level: ${Grid.sunLevel.toFixed(2)}`);
+    }
 
     // Update the width of the bar based on sun level
     const barWidth = Phaser.Math.Linear(0, 200, Grid.sunLevel);
