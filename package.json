@@ -16,7 +16,8 @@
     "pre-commit": "^1.2.2",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
-    "phaser": "^3.0.0"
+    "phaser": "^3.0.0",
+    "copyfiles": "^2.4.0"
   },
   "eslintConfig": {
     "root": true,
