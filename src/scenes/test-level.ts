@@ -5,6 +5,7 @@ import { gridConfig } from "../grid-config";
 import Crop, { CropType } from "../classes/crop";
 import SaveManager from "../saves/save-manager";
 import { gameConfig } from "../main";
+import Button from "../classes/button";
 // import { Engine } from "matter";
 //import TileObject from "../classes/tile-object";
 
@@ -60,9 +61,9 @@ export class Test extends Phaser.Scene {
       this.load.image("redoButton", "buttons/redoButtonHebrew.png");
       this.load.image("saveButton", "buttons/saveButtonHebrew.png");
     } else if (gameConfig.chinese) {
-        this.load.image("undoButton", "buttons/undoButtonChinese.png");
-        this.load.image("redoButton", "buttons/redoButtonChinese.png");
-        this.load.image("saveButton", "buttons/saveButtonChinese.png");
+      this.load.image("undoButton", "buttons/undoButtonChinese.png");
+      this.load.image("redoButton", "buttons/redoButtonChinese.png");
+      this.load.image("saveButton", "buttons/saveButtonChinese.png");
     } else {
       this.load.image("undoButton", "buttons/undoButton.png");
       this.load.image("redoButton", "buttons/redoButton.png");
@@ -76,65 +77,82 @@ export class Test extends Phaser.Scene {
   create() {
     let cropType = CropType.purple;
 
-    const undoButton = this.add.image(1175, 115, "undoButton").setInteractive();
-    undoButton.setScale(3.4);
-    undoButton
-      .on("pointerdown", () => {
+    // undo button
+    new Button({
+      scene: this,
+      x: 1175,
+      y: 115,
+      texture: "undoButton",
+      clickAction: () => {
         console.log("undo Button Clicked");
         SaveManager.undo();
         this.updatePlayerPrevPosition();
-      })
-      .setDepth(1);
+      },
+    });
 
-    const redoButton = this.add.image(1175, 180, "redoButton").setInteractive();
-    redoButton.setScale(3.4);
-    redoButton
-      .on("pointerdown", () => {
+    // redo button
+    new Button({
+      scene: this,
+      x: 1175,
+      y: 180,
+      texture: "redoButton",
+      clickAction: () => {
         console.log("redo Button Clicked");
         SaveManager.redo();
         this.updatePlayerPrevPosition();
-      })
-      .setDepth(1);
+      },
+    });
 
-    const saveButton = this.add.image(1175, 245, "saveButton").setInteractive();
-    saveButton.setScale(3.4);
-    saveButton
-      .on("pointerdown", () => {
+    // save button
+    new Button({
+      scene: this,
+      x: 1175,
+      y: 245,
+      texture: "saveButton",
+      clickAction: () => {
         console.log("save Button Clicked");
         SaveManager.save();
-      })
-      .setDepth(1);
+      },
+    });
 
-    const redButton = this.add.image(1240, 50, "redButton").setInteractive();
-    redButton.setScale(3);
-    redButton
-      .on("pointerdown", () => {
+    // red button
+    new Button({
+      scene: this,
+      x: 1240,
+      y: 50,
+      texture: "redButton",
+      scale: 3,
+      clickAction: () => {
         console.log("red Button Clicked");
         cropType = CropType.red;
-      })
-      .setDepth(1);
+      },
+    });
 
-    const greenButton = this.add
-      .image(1175, 50, "greenButton")
-      .setInteractive();
-    greenButton.setScale(3);
-    greenButton
-      .on("pointerdown", () => {
+    // green button
+    new Button({
+      scene: this,
+      x: 1175,
+      y: 50,
+      texture: "greenButton",
+      scale: 3,
+      clickAction: () => {
         console.log("Green Button Clicked");
         cropType = CropType.green;
-      })
-      .setDepth(1);
+      },
+    });
 
-    const purpleButton = this.add
-      .image(1110, 50, "purpleButton")
-      .setInteractive();
-    purpleButton.setScale(3);
-    purpleButton
-      .on("pointerdown", () => {
+    // purple button
+    new Button({
+      scene: this,
+      x: 1110,
+      y: 50,
+      texture: "purpleButton",
+      scale: 3,
+      clickAction: () => {
         console.log("Purple Button Clicked");
         cropType = CropType.purple;
-      })
-      .setDepth(1);
+      },
+    });
 
     this.harvestedText = this.add
       .text(10, 10, "", {
@@ -230,7 +248,6 @@ export class Test extends Phaser.Scene {
       this.displayMoistureLevel(row, col);
     });
 
-
     // Save Manager Init
     SaveManager.setPlayer(this.player);
     SaveManager.setScene(this);
@@ -250,7 +267,7 @@ export class Test extends Phaser.Scene {
       } else if (gameConfig.hebrew) {
         this.moistureText.setText(`לַחוּת: ${moistureLevel.toFixed(2)}`);
       } else {
-      this.moistureText.setText(`Moisture: ${moistureLevel.toFixed(2)}`);
+        this.moistureText.setText(`Moisture: ${moistureLevel.toFixed(2)}`);
       }
 
       const barWidth = Phaser.Math.Linear(0, 100, moistureLevel);
