@@ -3,7 +3,6 @@ import { TileObjectConfig } from "./tile-object";
 import TileObject from "./tile-object";
 import Phaser from "phaser";
 import * as Behaviors from "../behaviors/behaviors";
-import SaveManager from "../saves/save-manager";
 
 export enum CropType {
   green,
@@ -118,7 +117,6 @@ export default class Crop extends TileObject {
     if (this.level < this.sprites.length - 1) {
       return -1;
     }
-    SaveManager.save();
     this.delete();
     Crop.consumed += 1;
     return this.level * this.growthRate;

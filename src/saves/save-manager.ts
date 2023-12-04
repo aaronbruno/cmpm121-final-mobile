@@ -144,4 +144,14 @@ export default class SaveManager {
       Crop.consumed = parsedData.score || 0;
     }
   }
+
+  /**
+   * clears all save data, does not reset the actual game state
+   */
+  static clear() {
+    localStorage.clear();
+    this.curTurn = 0;
+    this.maxTurn = 0;
+    this.isMostRecentTurn = true;
+  }
 }

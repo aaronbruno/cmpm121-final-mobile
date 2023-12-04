@@ -208,6 +208,7 @@ export class Test extends Phaser.Scene {
           // Plant functionality
           // const cropType = CropType.purple; // You may want to change this based on your logic
           Crop.plantCrop(this, cropType, pointer.x, pointer.y);
+          SaveManager.save();
         } else {
           // Existing pointerdown functionality for eating crops
           const distanceToPlayer = Phaser.Math.Distance.BetweenPoints(
@@ -217,7 +218,10 @@ export class Test extends Phaser.Scene {
 
           if (distanceToPlayer <= 150 && tile[0] instanceof Crop) {
             const obj = Grid.getTileObject({ row, col }) as Crop;
-            obj?.eat();
+            if (obj) {
+              obj.eat();
+              SaveManager.save();
+            }
           }
         }
       }
