@@ -62,6 +62,11 @@ export default abstract class TileObject {
     Grid.removeTileObj(this);
   }
 
+  delete() {
+    this.sprite.destroy();
+    this.removeFromGrid();
+  }
+
   /**
    * get the neighboring TileObjects to this TileObject
    * @returns arrays of neighbors to the left, right, up, and down directions

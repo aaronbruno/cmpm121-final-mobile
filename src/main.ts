@@ -27,7 +27,7 @@ const game = new Phaser.Game({
 },
   pixelArt: true,
   backgroundColor: 0x0000ff,
-  scene: [Title, Test],
+  scene: [Test, Title, ],
   title: "121 Final"
 });
 

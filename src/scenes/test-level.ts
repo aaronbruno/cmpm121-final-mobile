@@ -82,6 +82,7 @@ export class Test extends Phaser.Scene {
       .on("pointerdown", () => {
         console.log("undo Button Clicked");
         SaveManager.undo();
+        this.updatePlayerPrevPosition();
       })
       .setDepth(1);
 
@@ -91,6 +92,7 @@ export class Test extends Phaser.Scene {
       .on("pointerdown", () => {
         console.log("redo Button Clicked");
         SaveManager.redo();
+        this.updatePlayerPrevPosition();
       })
       .setDepth(1);
 
@@ -230,6 +232,7 @@ export class Test extends Phaser.Scene {
     SaveManager.setScene(this);
     SaveManager.loadCurTurn();
     SaveManager.load();
+    SaveManager.save(); // init original turn
   }
 
   displayMoistureLevel(row: number, col: number) {

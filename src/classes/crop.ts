@@ -117,8 +117,7 @@ export default class Crop extends TileObject {
     if (this.level < this.sprites.length - 1) {
       return -1;
     }
-    this.sprite.destroy();
-    this.removeFromGrid();
+    this.delete();
     Crop.consumed += 1;
     return this.level * this.growthRate;
   }

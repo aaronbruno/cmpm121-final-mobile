@@ -19,6 +19,7 @@ interface SaveData {
 
 export default class SaveManager {
   static curTurn: number;
+  static maxTurn: number;
   static isMostRecentTurn = true;
   static player: Player;
   static scene: Phaser.Scene;
@@ -36,8 +37,10 @@ export default class SaveManager {
    */
   static loadCurTurn() {
     const result = localStorage.getItem("curTurn");
+    const maxTurn = localStorage.getItem("maxTurn");
     if (result) {
       SaveManager.curTurn = parseInt(result);
+      SaveManager.maxTurn = parseInt(maxTurn!);
     } else {
       SaveManager.curTurn = 0;
     }
@@ -50,6 +53,7 @@ export default class SaveManager {
     if (SaveManager.curTurn <= 0) return;
     SaveManager.curTurn--;
     SaveManager.load();
+    localStorage.setItem("curTurn", String(this.curTurn));
     SaveManager.isMostRecentTurn = false;
   }
 
@@ -60,6 +64,10 @@ export default class SaveManager {
     if (SaveManager.isMostRecentTurn) return;
     SaveManager.curTurn++;
     SaveManager.load();
+    localStorage.setItem("curTurn", String(this.curTurn));
+    if (SaveManager.curTurn == SaveManager.maxTurn) {
+      SaveManager.isMostRecentTurn = true;
+    }
   }
 
   /**
@@ -74,8 +82,11 @@ export default class SaveManager {
     };
     localStorage.setItem(String(this.curTurn), JSON.stringify(saveObj));
     localStorage.setItem("curTurn", String(this.curTurn));
+    SaveManager.maxTurn = this.curTurn;
+    localStorage.setItem("maxTurn", String(this.maxTurn));
     SaveManager.isMostRecentTurn = true;
     this.curTurn++;
+
   }
 
   /**
@@ -111,6 +122,10 @@ export default class SaveManager {
         this.player.x = parsedData.pos.x;
         this.player.y = parsedData.pos.y;
       }
+
+      Grid.forEachTile(obj => {
+        obj.delete();
+      });
   
       parsedData.crops.forEach(save => { 
         // Create a new Crop instance with updated properties
