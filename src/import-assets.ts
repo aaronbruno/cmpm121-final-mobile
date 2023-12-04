@@ -30,7 +30,7 @@ import "../assets/plants/redlevel2.png";
 import "../assets/plants/redlevel3.png";
 
 // terrain
-import "../assets/plants/drydirt.png";
-import "../assets/plants/farmDry.json";
-import "../assets/plants/farmtiles.png";
-import "../assets/plants/farmWet.json";
+import "../assets/terrain/drydirt.png";
+import "../assets/terrain/farmDry.json";
+import "../assets/terrain/farmtiles.png";
+import "../assets/terrain/farmWet.json";
