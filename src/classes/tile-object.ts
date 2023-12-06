@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Position } from "./grid";
 import Grid from "./grid";
+import luck from "../luck";
 
 export interface TileObjectConfig {
   readonly scene: Phaser.Scene;
@@ -11,24 +12,39 @@ export interface TileObjectConfig {
 }
 
 export default abstract class TileObject {
-  readonly name: string;
-  private _row: number;
+  protected view: DataView;
+
+  private nameMap = new Map<number, string>();
+
+  private set name(x: string) {
+    this.view.setFloat32(0, luck(x));
+    this.nameMap.set(this.view.getFloat32(0), x);
+  }
+  get name(): string {
+    return this.nameMap.get(this.view.getFloat32(0))!;
+  }
+
+  private set row(i: number) {
+    this.view.setUint32(4, i);
+  }
   get row(): number {
-    return this._row;
+    return this.view.getUint32(4);
   }
 
-  private _col: number;
+  private set col(i: number) {
+    this.view.setUint32(8, i);
+  }
   get col(): number {
-    return this._col;
+    return this.view.getUint32(8);
   }
 
-  static readonly numBytes = 8;
+  static readonly numBytes = 52;
 
   /**
    * returns the key used to access this object's tile in the grid
    */
   get pos(): Position {
-    return { row: this._row, col: this._col };
+    return { row: this.row, col: this.col };
   }
 
   readonly scene: Phaser.Scene;
@@ -39,13 +55,15 @@ export default abstract class TileObject {
    * @param config config object containing a scene, name, spriteName, row, and column
    */
   constructor(config: TileObjectConfig) {
+    const index = Grid.width * config.row + config.col;
+    this.view = new DataView(Grid.buff, index * TileObject.numBytes);
     this.name = config.name;
-    this._row = config.row;
-    this._col = config.col;
+    this.row = config.row;
+    this.col = config.col;
     this.scene = config.scene;
     this.sprite = this.scene.add.sprite(
-      (this.col * Grid.tileWidth) + (Grid.tileWidth * 0.5),
-      (this.row * Grid.tileHeight) + (Grid.tileHeight * 0.5),
+      this.col * Grid.tileWidth + Grid.tileWidth * 0.5,
+      this.row * Grid.tileHeight + Grid.tileHeight * 0.5,
       config.spriteName
     );
     const scaleFactor = Grid.tileWidth / this.sprite.width;
@@ -87,10 +105,10 @@ export default abstract class TileObject {
    */
   moveToTile(row: number, col: number) {
     this.removeFromGrid();
-    this._row = row;
-    this._col = col;
-    this.sprite.x = (this.col * Grid.tileWidth) + (Grid.tileWidth * 0.5);
-    this.sprite.y = (this.row * Grid.tileHeight) + (Grid.tileHeight * 0.5);
+    this.row = row;
+    this.col = col;
+    this.sprite.x = this.col * Grid.tileWidth + Grid.tileWidth * 0.5;
+    this.sprite.y = this.row * Grid.tileHeight + Grid.tileHeight * 0.5;
     this.addToGrid();
   }
 
@@ -99,7 +117,7 @@ export default abstract class TileObject {
    * @param col grid column number
    */
   moveToCol(col: number) {
-    this.moveToTile(this._row, col);
+    this.moveToTile(this.row, col);
   }
 
   /**
@@ -107,7 +125,7 @@ export default abstract class TileObject {
    * @param row grid row number
    */
   moveToRow(row: number) {
-    this.moveToTile(row, this._col);
+    this.moveToTile(row, this.col);
   }
 
   /**

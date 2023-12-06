@@ -56,7 +56,7 @@ export class Test extends Phaser.Scene {
     this.load.image("redButton", "buttons/redButton.png");
     this.load.image("greenButton", "buttons/greenButton.png");
     this.load.image("purpleButton", "buttons/purpleButton.png");
-    if (gameConfig.hebrew) {
+    if (gameConfig?.hebrew) {
       this.load.image("undoButton", "buttons/undoButtonHebrew.png");
       this.load.image("redoButton", "buttons/redoButtonHebrew.png");
       this.load.image("saveButton", "buttons/saveButtonHebrew.png");

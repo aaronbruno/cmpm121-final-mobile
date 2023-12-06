@@ -60,7 +60,10 @@ export default class Grid {
     return this._turnNumber;
   }
 
-  private static buff: ArrayBuffer;
+  private static _buff: ArrayBuffer;
+  public static get buff(): ArrayBuffer {
+    return this._buff;
+  }
 
   private static maxObjsPerTile = 2;
 
@@ -83,10 +86,9 @@ export default class Grid {
     Grid._scene = scene;
     Grid._turnNumber = 0;
 
-    Grid.buff = new ArrayBuffer(
+    Grid._buff = new ArrayBuffer(
       Grid.width * Grid.height * TileObject.numBytes * Grid.maxObjsPerTile
     );
-    console.log(Grid.buff);
   }
 
   public static getKey(pos: Position): string {

@@ -3,6 +3,7 @@ import { TileObjectConfig } from "./tile-object";
 import TileObject from "./tile-object";
 import Phaser from "phaser";
 import * as Behaviors from "../behaviors/behaviors";
+import luck from "../luck";
 
 export enum CropType {
   green,
@@ -30,29 +31,95 @@ const maxNeighborGrowth = 3;
 
 // crop class for growing and harvesting crops
 export default class Crop extends TileObject {
-  private _level: number;
+  private set level(i: number) {
+    this.view.setUint32(12, i);
+  }
   public get level(): number {
-    return this._level;
+    return this.view.getUint32(12);
   }
   public setLevel(level: number) {
-    this._level = level;
-    this.setSprite(this.sprites[this.level]);
+    this.view.setUint32(12, level);
+    this.setSprite(this.sprites[level]);
   }
-  readonly sprites: string[];
 
-  readonly type: CropType;
-  readonly growthRate: number; // number of turns to grow another level
-  growthProgress: number; // number of turns taken towards next level
-  readonly bestSun: number;
-  readonly bestWater: number;
-  readonly bestNeighborCount: number;
-  readonly turnBehaviors: CropBehavior[];
-  readonly levelUpBehaviors: CropBehavior[];
+  private spritesMap = new Map<number, string[]>();
+
+  private set sprites(x: string[]) {
+    this.view.setFloat32(16, luck(x.join()));
+    this.spritesMap.set(this.view.getFloat32(16), x);
+  }
+  get sprites(): string[] {
+    return this.spritesMap.get(this.view.getFloat32(16))!;
+  }
+
+  private set type(t: CropType) {
+    this.view.setUint32(20, t as number);
+  }
+  public get type(): CropType {
+    return this.view.getUint32(20) as CropType;
+  }
+
+  // number of turns to grow another level
+  private set growthRate(i: number) {
+    this.view.setUint32(24, i);
+  }
+  public get growthRate(): number {
+    return this.view.getUint32(24);
+  }
+
+  // number of turns taken towards next level
+  public set growthProgress(i: number) {
+    this.view.setUint32(28, i);
+  }
+  public get growthProgress(): number {
+    return this.view.getUint32(28);
+  }
+
+  private set bestSun(i: number) {
+    this.view.setFloat32(32, i);
+  }
+  public get bestSun(): number {
+    return this.view.getFloat32(32);
+  }
+
+  private set bestWater(i: number) {
+    this.view.setFloat32(36, i);
+  }
+  public get bestWater(): number {
+    return this.view.getFloat32(36);
+  }
+
+  private set bestNeighborCount(i: number) {
+    this.view.setFloat32(40, i);
+  }
+  public get bestNeighborCount(): number {
+    return this.view.getFloat32(40);
+  }
+
+  private cropBehaviorsMap = new Map<number, CropBehavior[]>();
+
+  private set turnBehaviors(x: CropBehavior[]) {
+    this.view.setFloat32(44, luck(x.join()));
+    this.cropBehaviorsMap.set(this.view.getFloat32(44), x);
+  }
+  get turnBehaviors(): CropBehavior[] {
+    return this.cropBehaviorsMap.get(this.view.getFloat32(44))!;
+  }
+
+  // readonly levelUpBehaviors: CropBehavior[];
+  private set levelUpBehaviors(x: CropBehavior[]) {
+    this.view.setFloat32(48, luck(x.join()));
+    this.cropBehaviorsMap.set(this.view.getFloat32(48), x);
+  }
+  get levelUpBehaviors(): CropBehavior[] {
+    return this.cropBehaviorsMap.get(this.view.getFloat32(48))!;
+  }
+
   static consumed = 0;
 
   constructor(config: CropConfig) {
     super(config.objectConfig);
-    this._level = 0;
+    this.level = 0;
     this.sprites = config.sprites;
     this.type = config.type;
     this.growthRate = config.growthRate;
@@ -95,7 +162,7 @@ export default class Crop extends TileObject {
   }
 
   levelUp() {
-    this._level++;
+    this.setLevel(this.level+1);
     this.growthProgress = 0;
     this.setSprite(this.sprites[this.level]);
     this.levelUpBehaviors.forEach((behavior) => {
