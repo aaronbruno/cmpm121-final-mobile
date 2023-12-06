@@ -27,7 +27,7 @@ export default class Grid {
     }
     return undefined;
   }
-  
+
   private static _width: number;
   public static get width(): number {
     return this._width;
@@ -60,7 +60,9 @@ export default class Grid {
     return this._turnNumber;
   }
 
-  //private static buff: ArrayBuffer;
+  private static buff: ArrayBuffer;
+
+  private static maxObjsPerTile = 2;
 
   private static tiles = new Map<string, TileObject[]>();
   /**
@@ -72,7 +74,7 @@ export default class Grid {
     readonly height: number,
     readonly tileWidth: number,
     readonly tileHeight: number,
-    readonly scene: Phaser.Scene,
+    readonly scene: Phaser.Scene
   ) {
     Grid._width = width;
     Grid._height = height;
@@ -81,7 +83,10 @@ export default class Grid {
     Grid._scene = scene;
     Grid._turnNumber = 0;
 
-    //Grid.buff = new ArrayBuffer(Grid.width * Grid.height * TileObject.numBytes);
+    Grid.buff = new ArrayBuffer(
+      Grid.width * Grid.height * TileObject.numBytes * Grid.maxObjsPerTile
+    );
+    console.log(Grid.buff);
   }
 
   public static getKey(pos: Position): string {
@@ -116,19 +121,14 @@ export default class Grid {
     objs?.splice(objs.indexOf(obj), 1);
   }
 
-  public static getAdjacentTiles(obj: TileObject): {
-    left: TileObject[];
-    right: TileObject[];
-    up: TileObject[];
-    down: TileObject[];
-  } {
+  public static getAdjacentTiles(obj: TileObject): Map<string, TileObject[]> {
     const center = obj.pos;
-    return {
-      left: Grid.getTile({ row: center.row - 1, col: center.col}),
-      right: Grid.getTile({ row: center.row + 1, col: center.col}),
-      up: Grid.getTile({ row: center.row, col: center.col - 1 }),
-      down: Grid.getTile({ row: center.row, col: center.col + 1 }),
-    };
+    return new Map([
+      ["left", Grid.getTile({ row: center.row - 1, col: center.col })],
+      ["right", Grid.getTile({ row: center.row + 1, col: center.col })],
+      ["up", Grid.getTile({ row: center.row, col: center.col - 1 })],
+      ["down", Grid.getTile({ row: center.row, col: center.col + 1 })],
+    ]);
   }
 
   public static nextTurn() {
@@ -144,7 +144,7 @@ export default class Grid {
   }
 
   public static drawTiles() {
-    const map = Grid._scene.make.tilemap({key:"map"});
+    const map = Grid._scene.make.tilemap({ key: "map" });
     const tileset = map.addTilesetImage("farmtiles");
     map.createLayer(0, tileset!, 0, 0)!.setScale(8);
   }

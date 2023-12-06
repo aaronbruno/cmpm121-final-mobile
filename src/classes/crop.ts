@@ -78,12 +78,10 @@ export default class Crop extends TileObject {
         Math.abs(Grid.getMoisture(this.pos) - this.bestWater) * maxWaterGrowth,
       0
     );
-    const neighbors = Grid.getAdjacentTiles(this);
     let sum = 0;
-    sum += neighbors.left.length;
-    sum += neighbors.right.length;
-    sum += neighbors.up.length;
-    sum += neighbors.down.length;
+    for (const neighbor of Grid.getAdjacentTiles(this).values()) {
+      sum += neighbor.length;
+    }
     this.growthProgress += Math.max(
       maxNeighborGrowth - Math.abs(sum - this.bestNeighborCount),
       0
