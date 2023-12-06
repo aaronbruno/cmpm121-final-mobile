@@ -26,6 +26,8 @@ Same as last week.
 Same as last week.
 
 **[F1.a] The important state of each cell of your game’s grid must be backed by a single contiguous byte array in AoS or SoA format. Your team must statically allocate memory usage for the whole grid.**\
+![array buffer layout](./arraybuf.jpg)
+Each crop is represented with an array buffer for efficient data stacking.
 
 **[F1.b] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.**\
 The player is given an undo and redo button that allows the player to move between save files, both forward and backward. If the player takes a turn after they’ve hit undo, then they will update the “most recent turn”, making it so they can’t redo back to where they were previously. The undo will take them all the way back to the start of the game.
