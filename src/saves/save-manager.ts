@@ -23,6 +23,7 @@ export default class SaveManager {
   static isMostRecentTurn = true;
   static player: Player;
   static scene: Phaser.Scene;
+  static saves = new Map<string, SaveData>;
 
   static setPlayer(player: Player) {
     SaveManager.player = player;
@@ -77,8 +78,8 @@ export default class SaveManager {
     const crops = SaveManager.getCropList();
     const saveObj = {
       crops: crops,
-      pos: {x: this.player.x, y: this.player.y},
-      score: Crop.consumed
+      pos: { x: this.player.x, y: this.player.y },
+      score: Crop.consumed,
     };
     localStorage.setItem(String(this.curTurn), JSON.stringify(saveObj));
     localStorage.setItem("curTurn", String(this.curTurn));
@@ -86,7 +87,14 @@ export default class SaveManager {
     localStorage.setItem("maxTurn", String(this.maxTurn));
     SaveManager.isMostRecentTurn = true;
     this.curTurn++;
+    return saveObj;
+  }
 
+  /**
+   * save game state to localStorage, uses curTurn
+   */
+  static saveToFile(file: string) {
+    this.saves.set(file, this.save());
   }
 
   /**
@@ -95,14 +103,14 @@ export default class SaveManager {
    */
   static getCropList(): CropSaveObj[] {
     const cropList: CropSaveObj[] = [];
-    Grid.forEachTile(tile => {
+    Grid.forEachTile((tile) => {
       const crop = tile as Crop;
       cropList.push({
         type: crop.type,
         level: crop.level,
         growthProgress: crop.growthProgress,
         row: crop.row,
-        col: crop.col
+        col: crop.col,
       });
     });
     return cropList;
@@ -116,18 +124,18 @@ export default class SaveManager {
 
     if (savedData) {
       const parsedData = JSON.parse(savedData) as SaveData;
-  
+
       // Load player position
       if (parsedData.pos) {
         this.player.x = parsedData.pos.x;
         this.player.y = parsedData.pos.y;
       }
 
-      Grid.forEachTile(obj => {
+      Grid.forEachTile((obj) => {
         obj.delete();
       });
-  
-      parsedData.crops.forEach(save => { 
+
+      parsedData.crops.forEach((save) => {
         // Create a new Crop instance with updated properties
         const updatedCrop = Crop.plantCrop(
           this.scene,
@@ -135,7 +143,7 @@ export default class SaveManager {
           save.col * Grid.tileHeight,
           save.row * Grid.tileWidth
         );
-        
+
         updatedCrop.setLevel(save.level);
         updatedCrop.growthProgress = save.growthProgress;
       });
@@ -143,6 +151,36 @@ export default class SaveManager {
       // Load score
       Crop.consumed = parsedData.score || 0;
     }
+  }
+
+  static loadFromFile(file: string) {
+    console.log(this.saves);
+    const savedData = this.saves.get(file);
+
+    if (!savedData) return;
+
+    this.player.x = savedData.pos.x;
+    this.player.y = savedData.pos.y;
+
+    Grid.forEachTile((obj) => {
+      obj.delete();
+    });
+
+    savedData.crops.forEach((save) => {
+      // Create a new Crop instance with updated properties
+      const updatedCrop = Crop.plantCrop(
+        this.scene,
+        save.type,
+        save.col * Grid.tileHeight,
+        save.row * Grid.tileWidth
+      );
+
+      updatedCrop.setLevel(save.level);
+      updatedCrop.growthProgress = save.growthProgress;
+    });
+
+    // Load score
+    Crop.consumed = savedData.score || 0;
   }
 
   /**

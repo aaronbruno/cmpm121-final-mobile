@@ -111,8 +111,16 @@ export class Test extends Phaser.Scene {
       texture: "saveButton",
       clickAction: () => {
         console.log("save Button Clicked");
-        SaveManager.save();
+        const file = prompt("Save File Name");
+        // Change this later to handle no input
+        SaveManager.saveToFile(file!);
       },
+    });
+
+    this.input.keyboard?.on("keydown-L", () => {
+      const file = prompt("Load File Name");
+      // Change this later to handle no input
+      SaveManager.loadFromFile(file!);
     });
 
     // red button
