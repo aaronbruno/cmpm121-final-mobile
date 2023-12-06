@@ -40,9 +40,3 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 }
-
-// export default class Player extends TileObject {
-//     override takeTurn() {
-//       console.log("player take turn");
-//     }
-//   }

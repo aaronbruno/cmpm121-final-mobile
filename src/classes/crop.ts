@@ -34,11 +34,15 @@ export default class Crop extends TileObject {
   public get level(): number {
     return this._level;
   }
+  public setLevel(level: number) {
+    this._level = level;
+    this.setSprite(this.sprites[this.level]);
+  }
   readonly sprites: string[];
 
   readonly type: CropType;
   readonly growthRate: number; // number of turns to grow another level
-  private growthProgress: number; // number of turns taken towards next level
+  growthProgress: number; // number of turns taken towards next level
   readonly bestSun: number;
   readonly bestWater: number;
   readonly bestNeighborCount: number;
@@ -113,8 +117,7 @@ export default class Crop extends TileObject {
     if (this.level < this.sprites.length - 1) {
       return -1;
     }
-    this.sprite.destroy();
-    this.removeFromGrid();
+    this.delete();
     Crop.consumed += 1;
     return this.level * this.growthRate;
   }

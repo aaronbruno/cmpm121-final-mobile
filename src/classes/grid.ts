@@ -1,5 +1,6 @@
 import TileObject from "./tile-object";
 import luck from "../luck";
+import SaveManager from "../saves/save-manager";
 
 export interface Position {
   row: number;
@@ -10,7 +11,7 @@ export default class Grid {
   // forEachTile(arg0: (tile: Tile) => void) {
   //   throw new Error("Method not implemented.");
   // }
-  forEachTile(callback: (tile: TileObject) => void) {
+  static forEachTile(callback: (tile: TileObject) => void) {
     for (const [, objs] of Grid.tiles) {
       for (const obj of objs) {
         callback(obj);
@@ -51,13 +52,15 @@ export default class Grid {
   }
 
   public static get sunLevel(): number {
-    return luck(this._turnNumber.toString());
+    return luck(String(SaveManager.curTurn));
   }
 
   private static _turnNumber: number;
   public static get turnNumber(): number {
     return this._turnNumber;
   }
+
+  //private static buff: ArrayBuffer;
 
   private static tiles = new Map<string, TileObject[]>();
   /**
@@ -77,6 +80,8 @@ export default class Grid {
     Grid._tileHeight = tileHeight;
     Grid._scene = scene;
     Grid._turnNumber = 0;
+
+    //Grid.buff = new ArrayBuffer(Grid.width * Grid.height * TileObject.numBytes);
   }
 
   public static getKey(pos: Position): string {
@@ -132,11 +137,10 @@ export default class Grid {
         obj.takeTurn();
       }
     }
-    this._turnNumber++;
   }
 
   public static getMoisture(pos: Position) {
-    return luck(Grid.getKey(pos) + Grid.turnNumber);
+    return luck(Grid.getKey(pos) + String(SaveManager.curTurn));
   }
 
   public static drawTiles() {

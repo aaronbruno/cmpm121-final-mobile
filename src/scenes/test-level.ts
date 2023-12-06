@@ -3,6 +3,10 @@ import Player from "../classes/player";
 import Grid from "../classes/grid";
 import { gridConfig } from "../grid-config";
 import Crop, { CropType } from "../classes/crop";
+import SaveManager from "../saves/save-manager";
+import { gameConfig } from "../main";
+import Button from "../classes/button";
+// import { Engine } from "matter";
 //import TileObject from "../classes/tile-object";
 
 // test basic functionality
@@ -52,6 +56,19 @@ export class Test extends Phaser.Scene {
     this.load.image("redButton", "buttons/redButton.png");
     this.load.image("greenButton", "buttons/greenButton.png");
     this.load.image("purpleButton", "buttons/purpleButton.png");
+    if (gameConfig.hebrew) {
+      this.load.image("undoButton", "buttons/undoButtonHebrew.png");
+      this.load.image("redoButton", "buttons/redoButtonHebrew.png");
+      this.load.image("saveButton", "buttons/saveButtonHebrew.png");
+    } else if (gameConfig.chinese) {
+      this.load.image("undoButton", "buttons/undoButtonChinese.png");
+      this.load.image("redoButton", "buttons/redoButtonChinese.png");
+      this.load.image("saveButton", "buttons/saveButtonChinese.png");
+    } else {
+      this.load.image("undoButton", "buttons/undoButton.png");
+      this.load.image("redoButton", "buttons/redoButton.png");
+      this.load.image("saveButton", "buttons/saveButton.png");
+    }
   }
 
   static mouseX: number;
@@ -60,36 +77,82 @@ export class Test extends Phaser.Scene {
   create() {
     let cropType = CropType.purple;
 
-    const redButton = this.add.image(1200, 50, "redButton").setInteractive();
-    redButton.setScale(3);
-    redButton
-      .on("pointerdown", () => {
+    // undo button
+    new Button({
+      scene: this,
+      x: 1175,
+      y: 115,
+      texture: "undoButton",
+      clickAction: () => {
+        console.log("undo Button Clicked");
+        SaveManager.undo();
+        this.updatePlayerPrevPosition();
+      },
+    });
+
+    // redo button
+    new Button({
+      scene: this,
+      x: 1175,
+      y: 180,
+      texture: "redoButton",
+      clickAction: () => {
+        console.log("redo Button Clicked");
+        SaveManager.redo();
+        this.updatePlayerPrevPosition();
+      },
+    });
+
+    // save button
+    new Button({
+      scene: this,
+      x: 1175,
+      y: 245,
+      texture: "saveButton",
+      clickAction: () => {
+        console.log("save Button Clicked");
+        SaveManager.save();
+      },
+    });
+
+    // red button
+    new Button({
+      scene: this,
+      x: 1240,
+      y: 50,
+      texture: "redButton",
+      scale: 3,
+      clickAction: () => {
         console.log("red Button Clicked");
         cropType = CropType.red;
-      })
-      .setDepth(1);
+      },
+    });
 
-    const greenButton = this.add
-      .image(1135, 50, "greenButton")
-      .setInteractive();
-    greenButton.setScale(3);
-    greenButton
-      .on("pointerdown", () => {
+    // green button
+    new Button({
+      scene: this,
+      x: 1175,
+      y: 50,
+      texture: "greenButton",
+      scale: 3,
+      clickAction: () => {
         console.log("Green Button Clicked");
         cropType = CropType.green;
-      })
-      .setDepth(1);
+      },
+    });
 
-    const purpleButton = this.add
-      .image(1070, 50, "purpleButton")
-      .setInteractive();
-    purpleButton.setScale(3);
-    purpleButton
-      .on("pointerdown", () => {
+    // purple button
+    new Button({
+      scene: this,
+      x: 1110,
+      y: 50,
+      texture: "purpleButton",
+      scale: 3,
+      clickAction: () => {
         console.log("Purple Button Clicked");
         cropType = CropType.purple;
-      })
-      .setDepth(1);
+      },
+    });
 
     this.harvestedText = this.add
       .text(10, 10, "", {
@@ -163,6 +226,7 @@ export class Test extends Phaser.Scene {
           // Plant functionality
           // const cropType = CropType.purple; // You may want to change this based on your logic
           Crop.plantCrop(this, cropType, pointer.x, pointer.y);
+          SaveManager.save();
         } else {
           // Existing pointerdown functionality for eating crops
           const distanceToPlayer = Phaser.Math.Distance.BetweenPoints(
@@ -172,7 +236,10 @@ export class Test extends Phaser.Scene {
 
           if (distanceToPlayer <= 150 && tile[0] instanceof Crop) {
             const obj = Grid.getTileObject({ row, col }) as Crop;
-            obj?.eat();
+            if (obj) {
+              obj.eat();
+              SaveManager.save();
+            }
           }
         }
       }
@@ -180,6 +247,13 @@ export class Test extends Phaser.Scene {
       // Display moisture level for the clicked tile
       this.displayMoistureLevel(row, col);
     });
+
+    // Save Manager Init
+    SaveManager.setPlayer(this.player);
+    SaveManager.setScene(this);
+    SaveManager.loadCurTurn();
+    SaveManager.load();
+    SaveManager.save(); // init original turn
   }
 
   displayMoistureLevel(row: number, col: number) {
@@ -188,7 +262,13 @@ export class Test extends Phaser.Scene {
     if (tile.length > 0 && tile[0] instanceof Crop) {
       const crop = Grid.getTileObject({ row, col }) as Crop;
       const moistureLevel = crop.getMoistureLevel();
-      this.moistureText.setText(`Moisture: ${moistureLevel.toFixed(2)}`);
+      if (gameConfig.chinese) {
+        this.moistureText.setText(`水分: ${moistureLevel.toFixed(2)}`);
+      } else if (gameConfig.hebrew) {
+        this.moistureText.setText(`לַחוּת: ${moistureLevel.toFixed(2)}`);
+      } else {
+        this.moistureText.setText(`Moisture: ${moistureLevel.toFixed(2)}`);
+      }
 
       const barWidth = Phaser.Math.Linear(0, 100, moistureLevel);
       this.moistureLevelBar.clear().fillRect(0, 0, barWidth, 20);
@@ -213,8 +293,16 @@ export class Test extends Phaser.Scene {
       this.playerPrevPosition.y
     );
 
-    this.harvestedText.setText(`Harvested: ${Crop.consumed}`);
-    this.sunLevelText.setText(`Sun Level: ${Grid.sunLevel.toFixed(2)}`);
+    if (gameConfig.chinese) {
+      this.harvestedText.setText(`收获的: ${Crop.consumed}`);
+      this.sunLevelText.setText(`太阳高度: ${Grid.sunLevel.toFixed(2)}`);
+    } else if (gameConfig.hebrew) {
+      this.harvestedText.setText(`בָּצוּר: ${Crop.consumed}`);
+      this.sunLevelText.setText(`מפלס השמש: ${Grid.sunLevel.toFixed(2)}`);
+    } else {
+      this.harvestedText.setText(`Harvested: ${Crop.consumed}`);
+      this.sunLevelText.setText(`Sun Level: ${Grid.sunLevel.toFixed(2)}`);
+    }
 
     // Update the width of the bar based on sun level
     const barWidth = Phaser.Math.Linear(0, 200, Grid.sunLevel);
@@ -243,8 +331,10 @@ export class Test extends Phaser.Scene {
       if (distanceMoved > thresholdPixelsWalked) {
         this.updatePlayerPrevPosition(); // turn-based evolution system
         console.log("satisfied");
+        // SaveManager.save(); //autosave
 
         Grid.nextTurn(); // all objects on grid take their turns
+        SaveManager.save();
       }
     }
   }
