@@ -8,7 +8,6 @@ import { gameConfig } from "../main";
 import Button from "../classes/button";
 // import { Engine } from "matter";
 //import TileObject from "../classes/tile-object";
-//import * as Urls from "../import-assets";
 
 // test basic functionality
 //random change
