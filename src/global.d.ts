@@ -1,2 +1,2 @@
-declare module "*.png";
+declare module "*.png?url";
 declare module "*.json";
