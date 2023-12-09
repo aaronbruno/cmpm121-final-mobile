@@ -8,7 +8,7 @@ import { gameConfig } from "../main";
 import Button from "../classes/button";
 // import { Engine } from "matter";
 //import TileObject from "../classes/tile-object";
-import * as Urls from "../import-assets";
+//import * as Urls from "../import-assets";
 
 // test basic functionality
 //random change
@@ -37,38 +37,38 @@ export class Test extends Phaser.Scene {
   }
 
   preload() {
-    //this.load.path = "assets/";
-    this.load.image("dryTile", Urls.dryDirt as string);
-    this.load.image("blue", Urls.blueFront as string);
-    this.load.tilemapTiledJSON("map", Urls.farmWet);
-    this.load.spritesheet("farmtiles", Urls.farmTiles as string, {
+    this.load.path = "assets/";
+    this.load.image("dryTile", "terrain/drydirt.png");
+    this.load.image("blue", "characters/blueFront.png");
+    this.load.tilemapTiledJSON("map", "terrain/farmWet.json");
+    this.load.spritesheet("farmtiles", "terrain/farmtiles.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
-    this.load.image("green1", Urls.greenLevel1 as string);
-    this.load.image("green2", Urls.greenLevel2 as string);
-    this.load.image("green3", Urls.greenLevel3 as string);
-    this.load.image("purple1", Urls.purpleLevel1 as string);
-    this.load.image("purple2", Urls.purpleLevel2 as string);
-    this.load.image("purple3", Urls.purpleLevel3 as string);
-    this.load.image("red1", Urls.redLevel1 as string);
-    this.load.image("red2", Urls.redLevel2 as string);
-    this.load.image("red3", Urls.redLevel3 as string);
-    this.load.image("redButton", Urls.redButton as string);
-    this.load.image("greenButton", Urls.greenButton as string);
-    this.load.image("purpleButton", Urls.purpleButton as string);
+    this.load.image("green1", "plants/greenlevel1.png");
+    this.load.image("green2", "plants/greenlevel2.png");
+    this.load.image("green3", "plants/greenlevel3.png");
+    this.load.image("purple1", "plants/purplelevel1.png");
+    this.load.image("purple2", "plants/purplelevel2.png");
+    this.load.image("purple3", "plants/purplelevel3.png");
+    this.load.image("red1", "plants/redlevel1.png");
+    this.load.image("red2", "plants/redlevel2.png");
+    this.load.image("red3", "plants/redlevel3.png");
+    this.load.image("redButton", "buttons/redButton.png");
+    this.load.image("greenButton", "buttons/greenButton.png");
+    this.load.image("purpleButton", "buttons/purpleButton.png");
     if (gameConfig?.hebrew) {
-      this.load.image("undoButton", Urls.undoButtonHebrew as string);
-      this.load.image("redoButton", Urls.redoButtonHebrew as string);
-      this.load.image("saveButton", Urls.saveButtonHebrew as string);
+      this.load.image("undoButton", "buttons/undoButtonHebrew.png");
+      this.load.image("redoButton", "buttons/redoButtonHebrew.png");
+      this.load.image("saveButton", "buttons/saveButtonHebrew.png");
     } else if (gameConfig.chinese) {
-      this.load.image("undoButton", Urls.undoButtonChinese as string);
-      this.load.image("redoButton", Urls.redoButtonChinese as string);
-      this.load.image("saveButton", Urls.saveButtonChinese as string);
+      this.load.image("undoButton", "buttons/undoButtonChinese.png");
+      this.load.image("redoButton", "buttons/redoButtonChinese.png");
+      this.load.image("saveButton", "buttons/saveButtonChinese.png");
     } else {
-      this.load.image("undoButton", Urls.undoButton as string);
-      this.load.image("redoButton", Urls.redoButton as string);
-      this.load.image("saveButton", Urls.saveButton as string);
+      this.load.image("undoButton", "buttons/undoButton.png");
+      this.load.image("redoButton", "buttons/redoButton.png");
+      this.load.image("saveButton", "buttons/saveButton.png");
     }
   }
 
