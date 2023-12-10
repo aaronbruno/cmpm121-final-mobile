@@ -1,0 +1,10 @@
+{
+    "rows": 10,
+    "columns": 10,
+    "tileWidth": 128,
+    "tileHeight": 128,
+    "height": 1280,
+    "width": 1280,
+    "avgSun": 0.5,
+    "avgWater": 0.5
+}

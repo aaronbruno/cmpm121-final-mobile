@@ -3,7 +3,6 @@ import { Test } from "./scenes/test-level";
 import { gridConfig } from "./grid-config";
 import { Title } from "./scenes/Title";
 
-
 export const gameConfig : {english: boolean, chinese: boolean, hebrew: boolean} = {
   english: false,
   chinese: false,

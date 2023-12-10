@@ -5,13 +5,19 @@ interface GridConfig {
   readonly tileHeight: number;
   readonly width: number;
   readonly height: number;
+  readonly avgSun: number;
+  readonly avgWater: number;
 }
 
-export const gridConfig: GridConfig = {
-  rows: 10,
-  columns: 10,
-  tileWidth: 128,
-  tileHeight: 128,
-  height: 10 * 128,
-  width: 10 * 128,
-};
+async function getGridConfig(): Promise<GridConfig> {
+  const response = await fetch("./assets/grid-config.json")
+    .then(response => {
+      return response.json();
+    }) as GridConfig;
+
+    return response;
+}
+
+export const gridConfig = await getGridConfig().then(result => {
+  return result;
+});
