@@ -60,7 +60,7 @@ export default class Crop extends TileObject {
   }
 
   // number of turns to grow another level
-  private set growthRate(i: number) {
+  public set growthRate(i: number) {
     this.view.setUint32(24, i);
   }
   public get growthRate(): number {
@@ -162,12 +162,16 @@ export default class Crop extends TileObject {
   }
 
   levelUp() {
-    this.setLevel(this.level+1);
+    this.setLevel(this.level + 1);
     this.growthProgress = 0;
     this.setSprite(this.sprites[this.level]);
-    this.levelUpBehaviors.forEach((behavior) => {
-      behavior(this);
-    });
+
+    // Check if turn behaviors are defined before iterating over them
+    if (this.levelUpBehaviors) {
+      this.levelUpBehaviors.forEach((behavior) => {
+        behavior(this);
+      });
+    }
   }
 
   getMoistureLevel(): number {
@@ -199,7 +203,8 @@ export default class Crop extends TileObject {
     scene: Phaser.Scene,
     type: CropType,
     x: number,
-    y: number
+    y: number,
+    hasPropagationBehavior = true
   ): Crop {
     let sprites: string[] = [];
     let name = "";
@@ -218,7 +223,7 @@ export default class Crop extends TileObject {
         bestSun = 0.5;
         bestWater = 0.5;
         bestNeighborCount = 0;
-        turnBehaviors = [];
+        turnBehaviors = [Behaviors.racistPlant];
         levelUpBehaviors = [];
         break;
       case CropType.purple:
@@ -239,8 +244,8 @@ export default class Crop extends TileObject {
         bestSun = 1;
         bestWater = 0.2;
         bestNeighborCount = 2;
-        turnBehaviors = [];
-        levelUpBehaviors = [];
+        turnBehaviors = [Behaviors.lateBloomer];
+        levelUpBehaviors = [Behaviors.duplication];
         break;
     }
 
@@ -261,7 +266,7 @@ export default class Crop extends TileObject {
       bestWater: bestWater,
       bestNeighborCount: bestNeighborCount,
       turnBehaviors: turnBehaviors,
-      levelUpBehaviors: levelUpBehaviors,
+      levelUpBehaviors: hasPropagationBehavior ? levelUpBehaviors : [],
     });
 
     return newCrop;
