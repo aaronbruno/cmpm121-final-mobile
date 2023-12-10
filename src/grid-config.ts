@@ -9,15 +9,6 @@ interface GridConfig {
   readonly avgWater: number;
 }
 
-async function getGridConfig(): Promise<GridConfig> {
-  const response = await fetch("./assets/grid-config.json")
-    .then(response => {
-      return response.json();
-    }) as GridConfig;
+import config from "../public/assets/grid-config.json";
 
-    return response;
-}
-
-export const gridConfig = await getGridConfig().then(result => {
-  return result;
-});
+export const gridConfig = config as GridConfig;
