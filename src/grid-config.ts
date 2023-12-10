@@ -6,7 +6,9 @@ interface GridConfig {
   readonly width: number;
   readonly height: number;
   readonly avgSun: number;
+  readonly sunWeight: number;
   readonly avgWater: number;
+  readonly waterWeight: number;
 }
 
 import config from "../public/assets/grid-config.json";

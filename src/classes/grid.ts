@@ -1,6 +1,7 @@
 import TileObject from "./tile-object";
 import luck from "../luck";
 import SaveManager from "../saves/save-manager";
+import { gridConfig } from "../grid-config";
 
 export interface Position {
   row: number;
@@ -52,7 +53,7 @@ export default class Grid {
   }
 
   public static get sunLevel(): number {
-    return luck(String(SaveManager.curTurn));
+    return gridConfig.avgSun + ((luck(String(SaveManager.curTurn)) - gridConfig.avgSun) / gridConfig.sunWeight);
   }
 
   private static _turnNumber: number;
@@ -142,7 +143,7 @@ export default class Grid {
   }
 
   public static getMoisture(pos: Position) {
-    return luck(Grid.getKey(pos) + String(SaveManager.curTurn));
+    return gridConfig.avgWater + ((luck(Grid.getKey(pos) + String(SaveManager.curTurn)) - gridConfig.avgWater) / gridConfig.waterWeight);
   }
 
   public static drawTiles() {
