@@ -127,3 +127,6 @@ case CropType.purple:
 ```
 
 ### Reflection
+The roles have generally stayed the same, but as time progresses the need for certain leads become less necessary with everyone being familiar with the engine for engine lead, tools being set up for tools lead, and much of design done for design lead. That’s not to say that they aren’t useless and that they don’t pop up as necessary here and there but generally more of a flow has picked up so everyone can focus on code more.
+
+As for the way the game has evolved, with new requirements for events, we had to rethink some aspects of crop. We used a crop config to help locate tiles on the grid and used that alongside a event file JSON. Otherwise much of the game design has been able to stay the same due to well thought out code and simple design steps.
