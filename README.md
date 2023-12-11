@@ -5,3 +5,5 @@
 ## [Devlog Entry - 11/28](./devlogs/devlog2.md)
 
 ## [Devlog Entry - 12/6](./devlogs/devlog3.md)
+
+## [Devlog Entry - 12/11](./devlogs/devlog4.md)
