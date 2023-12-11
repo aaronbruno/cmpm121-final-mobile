@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import Player from "../classes/player";
 import Grid from "../classes/grid";
-import { gridConfig } from "../grid-config";
+import { gridConfig, updateGridConfig } from "../grid-config";
 import Crop, { CropType } from "../classes/crop";
 import SaveManager from "../saves/save-manager";
 import { gameConfig } from "../main";
@@ -262,6 +262,7 @@ export class Test extends Phaser.Scene {
     SaveManager.loadCurTurn();
     SaveManager.load();
     SaveManager.save(); // init original turn
+    updateGridConfig(SaveManager.curTurn);
   }
 
   displayMoistureLevel(row: number, col: number) {
@@ -342,6 +343,7 @@ export class Test extends Phaser.Scene {
         // SaveManager.save(); //autosave
 
         Grid.nextTurn(); // all objects on grid take their turns
+        updateGridConfig(SaveManager.curTurn);
         SaveManager.save();
       }
     }

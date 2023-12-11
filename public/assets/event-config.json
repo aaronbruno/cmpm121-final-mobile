@@ -1,0 +1,12 @@
+[
+    {
+        "turn": 10,
+        "event": "rain",
+        "duration": 5
+    },
+    {
+        "turn": 20,
+        "event": "drought",
+        "duration": 5
+    }
+]
