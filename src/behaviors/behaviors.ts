@@ -54,8 +54,9 @@ export function propagate(self: Crop): void {
 }
 
 /**
- * If there is at least 1 other adjacent crop of same type,
- * spawn another crop (of same type) in one of the other adjacent tiles
+ * If there is at least 1 other adjacent crop 
+ * of same type, spawn another crop (of same type) 
+ * in one of the other adjacent tiles
  * @param self The crop object
  */
 export function duplication(self: Crop): void {
@@ -120,7 +121,8 @@ export function duplication(self: Crop): void {
 }
 
 /**
- * Crop takes twice as long to grow, regardless of any other conditions
+ * Crop takes twice as long to grow, 
+ * regardless of any other conditions
  * @param self
  */
 export function lateBloomer(self: Crop): void {
