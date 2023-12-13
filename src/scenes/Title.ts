@@ -4,6 +4,9 @@ import SaveManager from "../saves/save-manager";
 import { gridConfig } from "../grid-config";
 
 export class Title extends Phaser.Scene {
+  private continueText!: Phaser.GameObjects.Text;
+  private newGameText!: Phaser.GameObjects.Text;
+  private languageText!: Phaser.GameObjects.Text;
   constructor() {
     super("Title");
   }
@@ -30,6 +33,16 @@ export class Title extends Phaser.Scene {
     return interactiveText;
   }
 
+  updateTextBasedOnLanguage() {
+    const continueText = gameConfig.chinese ? "继续" : (gameConfig.hebrew ? "המשך" : "CONTINUE");
+    const newGameText = gameConfig.chinese ? "新游戏" : (gameConfig.hebrew ? "משחק חדש" : "NEW GAME");
+    const languageText = gameConfig.chinese ? "语言：" : (gameConfig.hebrew ? "שפה:" : "Language:");
+
+    this.continueText.setText(continueText);
+    this.newGameText.setText(newGameText);
+    this.languageText.setText(languageText);
+  }
+
   create() {
     gameConfig.chinese = false;
     gameConfig.hebrew = false;
@@ -37,48 +50,53 @@ export class Title extends Phaser.Scene {
 
     this.cameras.main.setBackgroundColor("#e75480");
 
-    const playText = this.createInteractiveText(gridConfig.width / 2, 300, "CONTINUE", {
+    this.continueText = this.createInteractiveText(gridConfig.width / 2, 300, "CONTINUE", {
       fontSize: "100px",
     });
-    playText.on("pointerdown", () => {
+    this.continueText.on("pointerdown", () => {
       this.scene.start("Test");
     });
 
-    const newGameText = this.createInteractiveText(gridConfig.width / 2, 600, "NEW GAME", {
+    this.newGameText = this.createInteractiveText(gridConfig.width / 2, 600, "NEW GAME", {
       fontSize: "100px",
     });
-    newGameText.on("pointerdown", () => {
+    this.newGameText.on("pointerdown", () => {
       SaveManager.clear();
       this.scene.start("Test");
     });
 
-    this.add.text(100, 800, "Language:", { fontSize: "50px" });
+    this.languageText = this.add.text(100, 800, "Language:", { fontSize: "50px" });
 
-    const chineseText = this.createInteractiveText(430, 800, "Chinese", {
+    const chineseText = this.createInteractiveText(430, 800, "中文", {
       fontSize: "50px",
     });
     chineseText.on("pointerdown", () => {
       gameConfig.chinese = true;
       gameConfig.hebrew = false;
       gameConfig.english = false;
+      this.updateTextBasedOnLanguage();
     });
 
-    const englishText = this.createInteractiveText(930, 800, "English", {
+    const englishText = this.createInteractiveText(830, 800, "English", {
       fontSize: "50px",
     });
     englishText.on("pointerdown", () => {
       gameConfig.chinese = false;
       gameConfig.hebrew = false;
       gameConfig.english = true;
+      this.updateTextBasedOnLanguage();
     });
 
-    const hebrewText = this.createInteractiveText(700, 800, "Hebrew", {
+    const hebrewText = this.createInteractiveText(600, 800, "עברית", {
       fontSize: "50px",
     });
     hebrewText.on("pointerdown", () => {
       gameConfig.chinese = false;
       gameConfig.hebrew = true;
       gameConfig.english = false;
+      this.updateTextBasedOnLanguage();
     });
+
+    this.updateTextBasedOnLanguage();
   }
 }
