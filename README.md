@@ -1,4 +1,4 @@
-# 121 Final Game: Name tbd
+# 121 Final Game: Name tbd (MOBILE BUILD)
 
 ## [Devlog Entry - 11/19](./devlogs/devlog1.md)
 
