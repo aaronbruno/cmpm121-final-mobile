@@ -44,15 +44,17 @@ Same as last week.
 Same as last week.
 
 **[F3.a] The game must be internationalized in way that allows all text visible to the player to be translated into different written languages.**\
-
+All text in the game can be translated between English, Mandarin, and Hebrew.
 
 **[F3.b] The game must be localized to support three different written languages.**\
 Our game has language options for English, Mandarin (logographic), and Hebrew (right-to-left). This will change in-game text, as well button images.
 
 **[F3.c] The game must be installable on a smartphone-class mobile device in the sense that there is a way to get it to show up as a home-screen icon that feels similar to other installed apps.**\
-
+We did not accomplish this.
 
 **[F3.d] Once installed in a mobile device, the game can be launched and satisfactorily played even when the device is not connected to the internet.**\
-
+We did not accomplish this.
 
 ### Reflection
+We weren’t able to figure out how to make our game installable on a mobile device. During presentations, other groups mentioned that it took them a few hours to set up. We probably missed some good resources that would lead us in the right direction, but Vite does seem to make things more complicated.\
+To make our game fully translated to our language options, Brayden had to redraw button sprites in different languages. This extra bit of labor required could have been avoided by using engine-rendered text. Doing so would make it harder to create a stylized font though, so there are trade-offs to either approach.
